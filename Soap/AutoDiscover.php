@@ -16,7 +16,7 @@
  * @package    Zend_Soap
  * @copyright  Copyright (c) 2005-2008 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
- * @version    $Id: AutoDiscover.php 12355 2008-11-07 08:20:41Z beberlei $
+ * @version    $Id: AutoDiscover.php 13636 2009-01-14 21:19:24Z beberlei $
  */
 
 #require_once 'Zend/Server/Interface.php';
@@ -36,22 +36,22 @@ class Zend_Soap_AutoDiscover implements Zend_Server_Interface {
     /**
      * @var Zend_Soap_Wsdl
      */
-    private $_wsdl = null;
+    protected $_wsdl = null;
 
     /**
      * @var Zend_Server_Reflection
      */
-    private $_reflection = null;
+    protected $_reflection = null;
 
     /**
      * @var array
      */
-    private $_functions = array();
+    protected $_functions = array();
 
     /**
      * @var boolean
      */
-    private $_strategy;
+    protected $_strategy;
 
     /**
      * Url where the WSDL file will be available at.
