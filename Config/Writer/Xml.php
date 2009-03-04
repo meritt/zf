@@ -16,7 +16,7 @@
  * @package    Zend_Config
  * @copyright  Copyright (c) 2005-2008 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
- * @version    $Id: Xml.php 13709 2009-01-20 12:26:34Z dasprid $
+ * @version    $Id: Xml.php 14176 2009-02-26 22:21:26Z dasprid $
  */
 
 /**
@@ -117,16 +117,16 @@ class Zend_Config_Writer_Xml extends Zend_Config_Writer
         } else {
             foreach ($this->_config as $sectionName => $data) {
                 if (!($data instanceof Zend_Config)) {
-                    continue;
+                    $xml->addChild($sectionName, (string) $data);
+                } else {
+                    $child = $xml->addChild($sectionName);
+                    
+                    if (isset($extends[$sectionName])) {
+                        $child->addAttribute('extends', $extends[$sectionName]);
+                    }
+        
+                    $this->_addBranch($data, $child);
                 }
-            
-                $child = $xml->addChild($sectionName);
-                
-                if (isset($extends[$sectionName])) {
-                    $child->addAttribute('extends', $extends[$sectionName]);
-                }
-    
-                $this->_addBranch($data, $child);
             }
         }
                 

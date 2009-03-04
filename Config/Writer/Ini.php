@@ -16,7 +16,7 @@
  * @package    Zend_Config
  * @copyright  Copyright (c) 2005-2008 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
- * @version    $Id: Ini.php 13709 2009-01-20 12:26:34Z dasprid $
+ * @version    $Id: Ini.php 14176 2009-02-26 22:21:26Z dasprid $
  */
 
 /**
@@ -134,15 +134,22 @@ class Zend_Config_Writer_Ini extends Zend_Config_Writer
             $iniString .= '[' . $sectionName . ']' . "\n"
                        .  $this->_addBranch($this->_config)
                        .  "\n";
-        } else {       
+        } else {
             foreach ($this->_config as $sectionName => $data) {
-                if (isset($extends[$sectionName])) {
-                    $sectionName .= ' : ' . $extends[$sectionName];
+                if (!($data instanceof Zend_Config)) {
+                    $iniString .= $sectionName
+                               .  ' = '
+                               .  $this->_prepareValue($data)
+                               .  "\n";
+                } else {
+                    if (isset($extends[$sectionName])) {
+                        $sectionName .= ' : ' . $extends[$sectionName];
+                    }
+                    
+                    $iniString .= '[' . $sectionName . ']' . "\n"
+                               .  $this->_addBranch($data)
+                               .  "\n";
                 }
-                
-                $iniString .= '[' . $sectionName . ']' . "\n"
-                           .  $this->_addBranch($data)
-                           .  "\n";
             }
         }
        
