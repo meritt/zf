@@ -15,7 +15,7 @@
  * @package    Zend_Controller
  * @subpackage Router
  * @copyright  Copyright (c) 2005-2008 Zend Technologies USA Inc. (http://www.zend.com)
- * @version    $Id: Module.php 12310 2008-11-05 20:49:16Z dasprid $
+ * @version    $Id: Module.php 15171 2009-04-26 21:43:36Z dasprid $
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
 
@@ -139,16 +139,20 @@ class Zend_Controller_Router_Route_Module extends Zend_Controller_Router_Route_A
      * @param string $path Path used to match against this routing map
      * @return array An array of assigned values or a false on a mismatch
      */
-    public function match($path)
+    public function match($path, $partial = false)
     {
         $this->_setRequestKeys();
 
         $values = array();
         $params = array();
-        $path   = trim($path, self::URI_DELIMITER);
+        
+        if (!$partial) {
+            $path = trim($path, self::URI_DELIMITER);
+        } else {
+            $matchedPath = $path;
+        }
 
         if ($path != '') {
-
             $path = explode(self::URI_DELIMITER, $path);
 
             if ($this->_dispatcher && $this->_dispatcher->isValidModule($path[0])) {
@@ -171,6 +175,10 @@ class Zend_Controller_Router_Route_Module extends Zend_Controller_Router_Route_A
                     $params[$key] = (isset($params[$key]) ? (array_merge((array) $params[$key], array($val))): $val);
                 }
             }
+        }
+        
+        if ($partial) {
+            $this->setMatchedPath($matchedPath);
         }
 
         $this->_values = $values + $params;

@@ -123,7 +123,6 @@ class Zend_Amf_Server implements Zend_Server_Interface
         return $this->_production;
     }
 
-
     /**
      * @param namespace of all incoming sessions defaults to Zend_Amf
      * @return Zend_Amf_Server

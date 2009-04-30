@@ -53,7 +53,7 @@
  * @package    Zend_Server
  * @copyright  Copyright (c) 2005-2008 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
- * @version    $Id: Abstract.php 14323 2009-03-15 11:24:58Z matthew $
+ * @version    $Id: Abstract.php 14322 2009-03-15 11:23:37Z matthew $
  */
 abstract class Zend_Server_Abstract implements Zend_Server_Interface
 {

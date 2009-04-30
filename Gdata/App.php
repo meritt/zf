@@ -1088,15 +1088,11 @@ class Zend_Gdata_App
      * already to use a proxy server or other interface.
      *
      * @param $logfile The logfile to use when logging the requests
-     * @param $adapter (optional) The adapter to use for logging. Default is
-     *        to use Zend_Gdata_App_LoggingHttpClientAdapterSocket.
-     * @return void
      */
-    public function enableRequestDebugLogging($logfile,
-        $adapter = 'Zend_Gdata_App_LoggingHttpClientAdapterSocket')
+    public function enableRequestDebugLogging($logfile)
     {
         $this->_httpClient->setConfig(array(
-            'adapter' => $adapter,
+            'adapter' => 'Zend_Gdata_App_LoggingHttpClientAdapterSocket',
             'logfile' => $logfile
             ));
     }
