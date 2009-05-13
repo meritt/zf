@@ -17,7 +17,7 @@
  * @subpackage Cloud
  * @copyright  Copyright (c) 2005-2008 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
- * @version    $Id: Cloud.php 15122 2009-04-23 22:05:33Z dasprid $
+ * @version    $Id: Cloud.php 15457 2009-05-09 15:19:13Z dasprid $
  */
 
 /**
@@ -161,7 +161,7 @@ class Zend_Tag_Cloud
     /**
      * Append a single tag to the cloud
      *
-     * @param  Zend_Tag_IItem|array $tag
+     * @param  Zend_Tag_Taggable|array $tag
      * @return Zend_Tag_Cloud
      */
     public function appendTag($tag)

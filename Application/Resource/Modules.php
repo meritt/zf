@@ -17,7 +17,7 @@
  * @subpackage Resource
  * @copyright  Copyright (c) 2005-2008 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
- * @version    $Id: Modules.php 14896 2009-04-14 21:09:43Z matthew $
+ * @version    $Id: Modules.php 15523 2009-05-11 14:07:22Z matthew $
  */
 
 /**
@@ -51,14 +51,14 @@ class Zend_Application_Resource_Modules extends Zend_Application_Resource_Resour
     /**
      * Initialize modules
      *
-     * @return void
+     * @return array
      * @throws Zend_Application_Resource_Exception When bootstrap class was not found
      */
     public function init()
     {
         $bootstrap = $this->getBootstrap();
-        $bootstrap->bootstrap('frontcontroller');
-        $front = $bootstrap->frontController;
+        $bootstrap->bootstrap('FrontController');
+        $front = $bootstrap->getResource('FrontController');
 
         $modules = $front->getControllerDirectory();
         $default = $front->getDefaultModule();
@@ -67,7 +67,7 @@ class Zend_Application_Resource_Modules extends Zend_Application_Resource_Resour
                 continue;
             }
 
-            $bootstrapClass = ucfirst($module) . '_Bootstrap';
+            $bootstrapClass = $this->_formatModuleName($module) . '_Bootstrap';
             if (!class_exists($bootstrapClass)) {
                 $bootstrapPath  = $front->getModuleDirectory($module) . '/Bootstrap.php';
                 if (file_exists($bootstrapPath)) {
@@ -96,5 +96,20 @@ class Zend_Application_Resource_Modules extends Zend_Application_Resource_Resour
     public function getExecutedBootstraps()
     {
         return $this->_bootstraps;
+    }
+
+    /**
+     * Format a module name to the module class prefix
+     * 
+     * @param  string $name 
+     * @return string
+     */
+    protected function _formatModuleName($name)
+    {
+        $name = strtolower($name);
+        $name = str_replace(array('-', '.'), ' ', $name);
+        $name = ucwords($name);
+        $name = str_replace(' ', '', $name);
+        return $name;
     }
 }
