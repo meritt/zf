@@ -48,7 +48,7 @@ class Zend_Service_Amazon_S3 extends Zend_Service_Amazon_Abstract
      */
     protected static $_wrapperClients = array();
 
-    const S3_ENDPOINT = 'http://s3.amazonaws.com';
+    const S3_ENDPOINT = 's3.amazonaws.com';
 
     const S3_ACL_PRIVATE = 'private';
     const S3_ACL_PUBLIC_READ = 'public-read';
@@ -147,6 +147,7 @@ class Zend_Service_Amazon_S3 extends Zend_Service_Amazon_Abstract
     {
         $info = array();
 
+        $object = $this->_fixupObjectName($object);
         $response = $this->_makeRequest('HEAD', $object);
 
         if ($response->getStatus() == 200) {
@@ -234,6 +235,25 @@ class Zend_Service_Amazon_S3 extends Zend_Service_Amazon_Abstract
         return $objects;
     }
 
+    protected function _fixupObjectName($object)
+    {
+        $nameparts = explode('/', $object, 2);
+
+        if (preg_match('/[^a-z0-9\._-]/', $nameparts[0])) {
+            /**
+             * @see Zend_Service_Amazon_S3_Exception
+             */
+            #require_once 'Zend/Service/Amazon/S3/Exception.php';
+            throw new Zend_Service_Amazon_S3_Exception("Bucket name contains invalid characters");
+        }
+
+        if(empty($nameparts[1])) {
+            return $object;
+        }
+
+        return $nameparts[0].'/'.urlencode($nameparts[1]);
+    }
+
     /**
      * Get an object
      *
@@ -242,6 +262,7 @@ class Zend_Service_Amazon_S3 extends Zend_Service_Amazon_Abstract
      */
     public function getObject($object)
     {
+        $object = $this->_fixupObjectName($object);
         $response = $this->_makeRequest('GET', $object);
 
         if ($response->getStatus() != 200) {
@@ -261,6 +282,7 @@ class Zend_Service_Amazon_S3 extends Zend_Service_Amazon_Abstract
      */
     public function putObject($object, $data, $meta=null)
     {
+        $object = $this->_fixupObjectName($object);
         $headers = (is_array($meta)) ? $meta : array();
 
         $headers['Content-MD5'] = base64_encode(md5($data, true));
@@ -295,6 +317,7 @@ class Zend_Service_Amazon_S3 extends Zend_Service_Amazon_Abstract
      */
     public function putFile($path, $object, $meta=null)
     {
+        $object = $this->_fixupObjectName($object);
         $data = @file_get_contents($path);
         if ($data === false) {
             /**
@@ -323,6 +346,7 @@ class Zend_Service_Amazon_S3 extends Zend_Service_Amazon_Abstract
      */
     public function removeObject($object)
     {
+        $object = $this->_fixupObjectName($object);
         $response = $this->_makeRequest('DELETE', $object);
 
         // Look for a 204 No Content response
@@ -362,7 +386,16 @@ class Zend_Service_Amazon_S3 extends Zend_Service_Amazon_Abstract
                                   'Expect'      => null,
                                   'Range'       => null,
                                   'x-amz-acl'   => null));
-        $client->setUri(self::S3_ENDPOINT.'/'.$path);
+
+        // build the end point out
+        $parts = explode('/', $path);
+        if(count($parts) > 1) {
+            $endpoint = 'http://' . $parts[0] . '.' . self::S3_ENDPOINT;
+            array_shift($parts);
+            $client->setUri($endpoint . '/' . implode('/', $parts));
+        } else {
+            $client->setUri('http://' . self::S3_ENDPOINT.'/'.$path);
+        }
         $client->setHeaders($headers);
 
         if (is_array($params)) {
@@ -406,7 +439,7 @@ class Zend_Service_Amazon_S3 extends Zend_Service_Amazon_Abstract
      * Add the S3 Authorization signature to the request headers
      *
      * @param  string $method
-     * @param  string $path
+     * @param  string $pathhttp://
      * @param  array &$headers
      * @return string
      */
