@@ -20,7 +20,7 @@
  * @version    $Id$
  */
 
-#require_once 'Zend/Service/Amazon/Ec2/Abstract.php';
+require_once 'Zend/Service/Amazon/Ec2/Abstract.php';
 
 
 /**

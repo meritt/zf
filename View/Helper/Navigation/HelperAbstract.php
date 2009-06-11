@@ -22,12 +22,12 @@
 /**
  * @see Zend_View_Helper_Navigation_Helper
  */
-#require_once 'Zend/View/Helper/Navigation/Helper.php';
+require_once 'Zend/View/Helper/Navigation/Helper.php';
 
 /**
  * @see Zend_View_Helper_HtmlElement
  */
-#require_once 'Zend/View/Helper/HtmlElement.php';
+require_once 'Zend/View/Helper/HtmlElement.php';
 
 /**
  * Base class for navigational helpers
@@ -83,6 +83,13 @@ abstract class Zend_View_Helper_Navigation_HelperAbstract
      * @var Zend_Acl
      */
     protected $_acl;
+
+    /**
+     * Wheter invisible items should be rendered by this helper
+     *
+     * @var bool
+     */
+    protected $_renderInvisible = false;
 
     /**
      * ACL role to use when iterating pages
@@ -161,7 +168,7 @@ abstract class Zend_View_Helper_Navigation_HelperAbstract
     {
         if (null === $this->_container) {
             // try to fetch from registry first
-            #require_once 'Zend/Registry.php';
+            require_once 'Zend/Registry.php';
             if (Zend_Registry::isRegistered('Zend_Navigation')) {
                 $nav = Zend_Registry::get('Zend_Navigation');
                 if ($nav instanceof Zend_Navigation_Container) {
@@ -170,7 +177,7 @@ abstract class Zend_View_Helper_Navigation_HelperAbstract
             }
 
             // nothing found in registry, create new container
-            #require_once 'Zend/Navigation.php';
+            require_once 'Zend/Navigation.php';
             $this->_container = new Zend_Navigation();
         }
 
@@ -303,7 +310,7 @@ abstract class Zend_View_Helper_Navigation_HelperAbstract
     public function getTranslator()
     {
         if (null === $this->_translator) {
-            #require_once 'Zend/Registry.php';
+            require_once 'Zend/Registry.php';
             if (Zend_Registry::isRegistered('Zend_Translate')) {
                 $this->setTranslator(Zend_Registry::get('Zend_Translate'));
             }
@@ -367,7 +374,7 @@ abstract class Zend_View_Helper_Navigation_HelperAbstract
             $role instanceof Zend_Acl_Role_Interface) {
             $this->_role = $role;
         } else {
-            #require_once 'Zend/View/Exception.php';
+            require_once 'Zend/View/Exception.php';
             throw new Zend_View_Exception(sprintf(
                     '$role must be a string, null, or an instance of ' .
                             'Zend_Acl_Role_Interface; %s given',
@@ -421,6 +428,29 @@ abstract class Zend_View_Helper_Navigation_HelperAbstract
     public function getUseAcl()
     {
         return $this->_useAcl;
+    }
+
+    /**
+     * Return renderInvisible flag
+     *
+     * @return bool
+     */
+    public function getRenderInvisible()
+    {
+        return $this->_renderInvisible;
+    }
+
+    /**
+     * Render invisible items?
+     *
+     * @param  bool $renderInvisible                       [optional] boolean flag
+     * @return Zend_View_Helper_Navigation_HelperAbstract  fluent interface
+     *                                                     returns self
+     */
+    public function setRenderInvisible($renderInvisible = true)
+    {
+        $this->_renderInvisible = (bool) $renderInvisible;
+        return $this;
     }
 
     /**
@@ -654,7 +684,8 @@ abstract class Zend_View_Helper_Navigation_HelperAbstract
      * Determines whether a page should be accepted when iterating
      *
      * Rules:
-     * - If a page is not visible, it is not accepted
+     * - If a page is not visible it is not accepted, unless RenderInvisible has
+     *   been set to true.
      * - If helper has no ACL, page is accepted
      * - If helper has ACL, but no role, page is not accepted
      * - If helper has ACL and role:
@@ -675,7 +706,7 @@ abstract class Zend_View_Helper_Navigation_HelperAbstract
         // accept by default
         $accept = true;
 
-        if (!$page->isVisible(false)) {
+        if (!$page->isVisible(false) && !$this->getRenderInvisible()) {
             // don't accept invisible pages
             $accept = false;
         } elseif ($this->getUseAcl() && !$this->_acceptAcl($page)) {
@@ -811,7 +842,7 @@ abstract class Zend_View_Helper_Navigation_HelperAbstract
             $role instanceof Zend_Acl_Role_Interface) {
             self::$_defaultRole = $role;
         } else {
-            #require_once 'Zend/View/Exception.php';
+            require_once 'Zend/View/Exception.php';
             throw new Zend_View_Exception(
                     '$role must be null|string|Zend_Acl_Role_Interface');
         }

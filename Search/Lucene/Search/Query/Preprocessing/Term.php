@@ -21,22 +21,22 @@
 
 
 /** Zend_Search_Lucene_Search_Query_Processing */
-#require_once 'Zend/Search/Lucene/Search/Query/Preprocessing.php';
+require_once 'Zend/Search/Lucene/Search/Query/Preprocessing.php';
 
 /** Zend_Search_Lucene_Search_Query_Phrase */
-#require_once 'Zend/Search/Lucene/Search/Query/Phrase.php';
+require_once 'Zend/Search/Lucene/Search/Query/Phrase.php';
 
 /** Zend_Search_Lucene_Search_Query_Insignificant */
-#require_once 'Zend/Search/Lucene/Search/Query/Insignificant.php';
+require_once 'Zend/Search/Lucene/Search/Query/Insignificant.php';
 
 /** Zend_Search_Lucene_Search_Query_Empty */
-#require_once 'Zend/Search/Lucene/Search/Query/Empty.php';
+require_once 'Zend/Search/Lucene/Search/Query/Empty.php';
 
 /** Zend_Search_Lucene_Search_Query_Term */
-#require_once 'Zend/Search/Lucene/Search/Query/Term.php';
+require_once 'Zend/Search/Lucene/Search/Query/Term.php';
 
 /** Zend_Search_Lucene_Index_Term */
-#require_once 'Zend/Search/Lucene/Index/Term.php';
+require_once 'Zend/Search/Lucene/Index/Term.php';
 
 
 /**
@@ -178,7 +178,7 @@ class Zend_Search_Lucene_Search_Query_Preprocessing_Term extends Zend_Search_Luc
                 // Check if each subputtern is a single word in terms of current analyzer
                 $tokens = Zend_Search_Lucene_Analysis_Analyzer::getDefault()->tokenize($subPattern[0], $subPatternsEncoding);
                 if (count($tokens) > 1) {
-                    #require_once 'Zend/Search/Lucene/Search/QueryParserException.php';
+                    require_once 'Zend/Search/Lucene/Search/QueryParserException.php';
                     throw new Zend_Search_Lucene_Search_QueryParserException('Wildcard search is supported only for non-multiple word terms');
                 }
                 foreach ($tokens as $token) {

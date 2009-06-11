@@ -16,23 +16,23 @@
  * @package    Zend_Paginator
  * @copyright  Copyright (c) 2005-2008 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
- * @version    $Id: DbSelect.php 14137 2009-02-21 23:25:39Z norm2782 $
+ * @version    $Id: DbSelect.php 15842 2009-05-31 01:40:20Z norm2782 $
  */
 
 /**
  * @see Zend_Paginator_Adapter_Interface
  */
-#require_once 'Zend/Paginator/Adapter/Interface.php';
+require_once 'Zend/Paginator/Adapter/Interface.php';
 
 /**
  * @see Zend_Db
  */
-#require_once 'Zend/Db.php';
+require_once 'Zend/Db.php';
 
 /**
  * @see Zend_Db_Select
  */
-#require_once 'Zend/Db/Select.php';
+require_once 'Zend/Db/Select.php';
 
 /**
  * @category   Zend
@@ -99,26 +99,28 @@ class Zend_Paginator_Adapter_DbSelect implements Zend_Paginator_Adapter_Interfac
                 $countColumnPart = $countColumnPart->__toString();
             }
 
+            $rowCountColumn = $this->_select->getAdapter()->foldCase(self::ROW_COUNT_COLUMN);
+
             // The select query can contain only one column, which should be the row count column
-            if (false === strpos($countColumnPart, self::ROW_COUNT_COLUMN)) {
+            if (false === strpos($countColumnPart, $rowCountColumn)) {
                 /**
                  * @see Zend_Paginator_Exception
                  */
-                #require_once 'Zend/Paginator/Exception.php';
+                require_once 'Zend/Paginator/Exception.php';
 
                 throw new Zend_Paginator_Exception('Row count column not found');
             }
 
             $result = $rowCount->query(Zend_Db::FETCH_ASSOC)->fetch();
 
-            $this->_rowCount = count($result) > 0 ? $result[self::ROW_COUNT_COLUMN] : 0;
+            $this->_rowCount = count($result) > 0 ? $result[$rowCountColumn] : 0;
         } else if (is_integer($rowCount)) {
             $this->_rowCount = $rowCount;
         } else {
             /**
              * @see Zend_Paginator_Exception
              */
-            #require_once 'Zend/Paginator/Exception.php';
+            require_once 'Zend/Paginator/Exception.php';
 
             throw new Zend_Paginator_Exception('Invalid row count');
         }
@@ -192,7 +194,9 @@ class Zend_Paginator_Adapter_DbSelect implements Zend_Paginator_Adapter_Interfac
             }
 
             $countPart  = empty($groupPart) ? 'COUNT(*)' : 'COUNT(DISTINCT ' . $groupPart . ')';
-            $expression = new Zend_Db_Expr($countPart . ' AS ' . $db->quoteIdentifier(self::ROW_COUNT_COLUMN));
+            $expression = new Zend_Db_Expr(
+                $countPart . ' AS ' . $db->quoteIdentifier($db->foldCase(self::ROW_COUNT_COLUMN))
+            );
 
             $rowCount->__toString(); // Workaround for ZF-3719 and related
             $rowCount->reset(Zend_Db_Select::COLUMNS)

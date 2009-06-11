@@ -23,12 +23,12 @@
 /**
  * @see Zend_Service_Amazon_Abstract
  */
-#require_once 'Zend/Service/Amazon/Abstract.php';
+require_once 'Zend/Service/Amazon/Abstract.php';
 
 /**
  * @see Zend_Crypt_Hmac
  */
-#require_once 'Zend/Crypt/Hmac.php';
+require_once 'Zend/Crypt/Hmac.php';
 
 /**
  * Amazon S3 PHP connection class
@@ -71,7 +71,7 @@ class Zend_Service_Amazon_S3 extends Zend_Service_Amazon_Abstract
             /**
              * @see Zend_Service_Amazon_S3_Exception
              */
-            #require_once 'Zend/Service/Amazon/S3/Exception.php';
+            require_once 'Zend/Service/Amazon/S3/Exception.php';
             throw new Zend_Service_Amazon_S3_Exception("Bucket name \"$bucket\" must be between 3 and 255 characters long");
         }
 
@@ -79,7 +79,7 @@ class Zend_Service_Amazon_S3 extends Zend_Service_Amazon_Abstract
             /**
              * @see Zend_Service_Amazon_S3_Exception
              */
-            #require_once 'Zend/Service/Amazon/S3/Exception.php';
+            require_once 'Zend/Service/Amazon/S3/Exception.php';
             throw new Zend_Service_Amazon_S3_Exception("Bucket name \"$bucket\" contains invalid characters");
         }
 
@@ -87,7 +87,7 @@ class Zend_Service_Amazon_S3 extends Zend_Service_Amazon_Abstract
             /**
              * @see Zend_Service_Amazon_S3_Exception
              */
-            #require_once 'Zend/Service/Amazon/S3/Exception.php';
+            require_once 'Zend/Service/Amazon/S3/Exception.php';
             throw new Zend_Service_Amazon_S3_Exception("Bucket name \"$bucket\" cannot be an IP address");
         }
 
@@ -243,7 +243,7 @@ class Zend_Service_Amazon_S3 extends Zend_Service_Amazon_Abstract
             /**
              * @see Zend_Service_Amazon_S3_Exception
              */
-            #require_once 'Zend/Service/Amazon/S3/Exception.php';
+            require_once 'Zend/Service/Amazon/S3/Exception.php';
             throw new Zend_Service_Amazon_S3_Exception("Bucket name contains invalid characters");
         }
 
@@ -323,7 +323,7 @@ class Zend_Service_Amazon_S3 extends Zend_Service_Amazon_Abstract
             /**
              * @see Zend_Service_Amazon_S3_Exception
              */
-            #require_once 'Zend/Service/Amazon/S3/Exception.php';
+            require_once 'Zend/Service/Amazon/S3/Exception.php';
             throw new Zend_Service_Amazon_S3_Exception("Cannot read file $path");
         }
 
@@ -718,7 +718,7 @@ class Zend_Service_Amazon_S3 extends Zend_Service_Amazon_Abstract
         /**
          * @see Zend_Service_Amazon_S3_Stream
          */
-        #require_once 'Zend/Service/Amazon/S3/Stream.php';
+        require_once 'Zend/Service/Amazon/S3/Stream.php';
 
         stream_register_wrapper($name, 'Zend_Service_Amazon_S3_Stream');
         $this->registerAsClient($name);

@@ -20,7 +20,7 @@
  * @version    $Id$
  */
 
-#require_once 'Zend/Service/Amazon/Ec2/Abstract.php';
+require_once 'Zend/Service/Amazon/Ec2/Abstract.php';
 /**
  * An Amazon EC2 interface to query which Regions your account has access to.
  *

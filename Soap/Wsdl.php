@@ -16,11 +16,11 @@
  * @package    Zend_Soap
  * @copyright  Copyright (c) 2005-2008 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
- * @version    $Id: Wsdl.php 14917 2009-04-15 15:40:17Z beberlei $
+ * @version    $Id: Wsdl.php 15829 2009-05-30 19:04:57Z beberlei $
  */
 
-#require_once "Zend/Soap/Wsdl/Strategy/Interface.php";
-#require_once "Zend/Soap/Wsdl/Strategy/Abstract.php";
+require_once "Zend/Soap/Wsdl/Strategy/Interface.php";
+require_once "Zend/Soap/Wsdl/Strategy/Abstract.php";
 
 /**
  * Zend_Soap_Wsdl
@@ -91,7 +91,7 @@ class Zend_Soap_Wsdl
                     xmlns:wsdl='http://schemas.xmlsoap.org/wsdl/'></definitions>";
         $this->_dom = new DOMDocument();
         if (!$this->_dom->loadXML($wsdl)) {
-            #require_once 'Zend/Server/Exception.php';
+            require_once 'Zend/Server/Exception.php';
             throw new Zend_Server_Exception('Unable to create DomDocument');
         } else {
             $this->_wsdl = $this->_dom->documentElement;
@@ -135,16 +135,16 @@ class Zend_Soap_Wsdl
     public function setComplexTypeStrategy($strategy)
     {
         if($strategy === true) {
-            #require_once "Zend/Soap/Wsdl/Strategy/DefaultComplexType.php";
+            require_once "Zend/Soap/Wsdl/Strategy/DefaultComplexType.php";
             $strategy = new Zend_Soap_Wsdl_Strategy_DefaultComplexType();
         } else if($strategy === false) {
-            #require_once "Zend/Soap/Wsdl/Strategy/AnyType.php";
+            require_once "Zend/Soap/Wsdl/Strategy/AnyType.php";
             $strategy = new Zend_Soap_Wsdl_Strategy_AnyType();
         } else if(is_string($strategy)) {
             if(class_exists($strategy)) {
                 $strategy = new $strategy();
             } else {
-                #require_once "Zend/Soap/Wsdl/Exception.php";
+                require_once "Zend/Soap/Wsdl/Exception.php";
                 throw new Zend_Soap_Wsdl_Exception(
                     sprintf("Strategy with name '%s does not exist.", $strategy
                 ));
@@ -152,7 +152,7 @@ class Zend_Soap_Wsdl
         }
 
         if(!($strategy instanceof Zend_Soap_Wsdl_Strategy_Interface)) {
-            #require_once "Zend/Soap/Wsdl/Exception.php";
+            require_once "Zend/Soap/Wsdl/Exception.php";
             throw new Zend_Soap_Wsdl_Exception("Set a strategy that is not of type 'Zend_Soap_Wsdl_Strategy_Interface'");
         }
         $this->_strategy = $strategy;
@@ -390,11 +390,15 @@ class Zend_Soap_Wsdl
     }
 
     /**
-     * Add a {@link http://www.w3.org/TR/wsdl#_documentation document} element to any element in the WSDL
+     * Add a documentation element to any element in the WSDL.
      *
-     * @param object $input_node An XML_Tree_Node returned by another method to add the document to
-     * @param string $document Human readable documentation for the node
-     * @return boolean
+     * Note that the WSDL {@link http://www.w3.org/TR/wsdl#_documentation specification} uses 'document',
+     * but the WSDL {@link http://schemas.xmlsoap.org/wsdl/ schema} uses 'documentation' instead.
+     * The {@link http://www.ws-i.org/Profiles/BasicProfile-1.1-2004-08-24.html#WSDL_documentation_Element WS-I Basic Profile 1.1} recommends using 'documentation'.
+     *
+     * @param object $input_node An XML_Tree_Node returned by another method to add the documentation to
+     * @param string $documentation Human readable documentation for the node
+     * @return DOMElement The documentation element
      */
     public function addDocumentation($input_node, $documentation)
     {
@@ -404,11 +408,15 @@ class Zend_Soap_Wsdl
             $node = $input_node;
         }
 
-        /** @todo Check if 'documentation' is a correct name for the element (WSDL spec uses 'document') */
         $doc = $this->_dom->createElement('documentation');
         $doc_cdata = $this->_dom->createTextNode($documentation);
         $doc->appendChild($doc_cdata);
-        $node->appendChild($doc);
+
+        if($node->hasChildNodes()) {
+            $node->insertBefore($doc, $node->firstChild);
+        } else {
+            $node->appendChild($doc);
+        }
 
         return $doc;
     }

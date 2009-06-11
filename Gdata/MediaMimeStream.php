@@ -185,7 +185,7 @@ class Zend_Gdata_MediaMimeStream
         $this->_fileContentType = $fileContentType;
 
         if (!file_exists($filePath) || !is_readable($filePath)) {
-            #require_once 'Zend/Gdata/App/IOException.php';
+            require_once 'Zend/Gdata/App/IOException.php';
             throw new Zend_Gdata_App_IOException('File to be uploaded at ' .
                 $filePath . ' does not exist or is not readable.');
         }
@@ -297,7 +297,7 @@ class Zend_Gdata_MediaMimeStream
     public function read($bufferSize)
     {
         if ($bufferSize > self::MAX_BUFFER_SIZE) {
-            #require_once 'Zend/Gdata/App/InvalidArgumentException.php';
+            require_once 'Zend/Gdata/App/InvalidArgumentException.php';
             throw new Zend_Gdata_App_InvalidArgumentException('Buffer size ' .
                 'is larger than the supported max of ' . self::MAX_BUFFER_SIZE);
         }

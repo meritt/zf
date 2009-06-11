@@ -21,7 +21,7 @@
 
 
 /** Zend_Search_Lucene_Document */
-#require_once 'Zend/Search/Lucene/Document.php';
+require_once 'Zend/Search/Lucene/Document.php';
 
 
 /**
@@ -300,7 +300,7 @@ class Zend_Search_Lucene_Document_Html extends Zend_Search_Lucene_Document
                                        . $highlightedWordNodeSetHtml
                                        . '</body></html>');
             if (!$success) {
-            	#require_once 'Zend/Search/Lucene/Exception.php';
+            	require_once 'Zend/Search/Lucene/Exception.php';
             	throw new Zend_Search_Lucene_Exception("Error occured while loading highlighted text fragment: '$highlightedNodeHtml'.");
             }
             $highlightedWordNodeSetXpath = new DOMXPath($highlightedWordNodeSetDomDocument);
@@ -409,7 +409,7 @@ class Zend_Search_Lucene_Document_Html extends Zend_Search_Lucene_Document
         }
 
         if (!is_callable($callback)) {
-        	#require_once 'Zend/Search/Lucene/Exception.php';
+        	require_once 'Zend/Search/Lucene/Exception.php';
         	throw new Zend_Search_Lucene_Exception('$viewHelper parameter mast be a View Helper name, View Helper object or callback.');
         }
 
