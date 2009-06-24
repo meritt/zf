@@ -20,7 +20,7 @@
  */
 
 /** Zend_Search_Lucene_Document_OpenXml */
-require_once 'Zend/Search/Lucene/Document/OpenXml.php';
+#require_once 'Zend/Search/Lucene/Document/OpenXml.php';
 
 if (class_exists('ZipArchive', false)) {
 
@@ -132,7 +132,7 @@ class Zend_Search_Lucene_Document_Docx extends Zend_Search_Lucene_Document_OpenX
      */
     public static function loadDocxFile($fileName, $storeContent = false) {
         if (!is_readable($fileName)) {
-        	require_once 'Zend/Search/Lucene/Document/Exception.php';
+        	#require_once 'Zend/Search/Lucene/Document/Exception.php';
         	throw new Zend_Search_Lucene_Document_Exception('Provided file \'' . $fileName . '\' is not readable.');
         }
 

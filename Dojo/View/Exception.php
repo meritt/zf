@@ -20,7 +20,7 @@
  * @version    $Id: Exception.php 13982 2009-02-05 11:54:55Z matthew $
  */
 
-require_once 'Zend/Dojo/Exception.php';
+#require_once 'Zend/Dojo/Exception.php';
 
 /**
  * @category   Zend

@@ -22,10 +22,10 @@
  */
 
 /** Zend_Uri_Http */
-require_once 'Zend/Uri/Http.php';
+#require_once 'Zend/Uri/Http.php';
 
 /** Zend_Http_Client_Adapter_Interface */
-require_once 'Zend/Http/Client/Adapter/Interface.php';
+#require_once 'Zend/Http/Client/Adapter/Interface.php';
 
 /**
  * An adapter class for Zend_Http_Client based on the curl extension.
@@ -101,7 +101,7 @@ class Zend_Http_Client_Adapter_Curl implements Zend_Http_Client_Adapter_Interfac
     public function __construct()
     {
         if (!extension_loaded('curl')) {
-            require_once 'Zend/Http/Client/Adapter/Exception.php';
+            #require_once 'Zend/Http/Client/Adapter/Exception.php';
             throw new Zend_Http_Client_Adapter_Exception('cURL extension has to be loaded to use this Zend_Http_Client adapter.');
         }
     }
@@ -116,7 +116,7 @@ class Zend_Http_Client_Adapter_Curl implements Zend_Http_Client_Adapter_Interfac
     public function setConfig($config = array())
     {
         if (!is_array($config)) {
-            require_once 'Zend/Http/Client/Adapter/Exception.php';
+            #require_once 'Zend/Http/Client/Adapter/Exception.php';
             throw new Zend_Http_Client_Adapter_Exception('Http Adapter configuration expects an array, ' . gettype($config) . ' recieved.');
         }
 
@@ -183,7 +183,7 @@ class Zend_Http_Client_Adapter_Curl implements Zend_Http_Client_Adapter_Interfac
         if (!$this->_curl) {
             $this->close();
 
-            require_once 'Zend/Http/Client/Adapter/Exception.php';
+            #require_once 'Zend/Http/Client/Adapter/Exception.php';
             throw new Zend_Http_Client_Adapter_Exception('Unable to Connect to ' .  $host . ':' . $port);
         }
 
@@ -216,12 +216,12 @@ class Zend_Http_Client_Adapter_Curl implements Zend_Http_Client_Adapter_Interfac
     {
         // Make sure we're properly connected
         if (!$this->_curl) {
-            require_once 'Zend/Http/Client/Adapter/Exception.php';
+            #require_once 'Zend/Http/Client/Adapter/Exception.php';
             throw new Zend_Http_Client_Adapter_Exception("Trying to write but we are not connected");
         }
 
         if ($this->_connected_to[0] != $uri->getHost() || $this->_connected_to[1] != $uri->getPort()) {
-            require_once 'Zend/Http/Client/Adapter/Exception.php';
+            #require_once 'Zend/Http/Client/Adapter/Exception.php';
             throw new Zend_Http_Client_Adapter_Exception("Trying to write but we are connected to the wrong host");
         }
 
@@ -244,7 +244,7 @@ class Zend_Http_Client_Adapter_Curl implements Zend_Http_Client_Adapter_Interfac
                 // or CURLOPT_INFILE and CURLOPT_INFILESIZE are used.
                 if (isset($this->_config['curloptions'][CURLOPT_INFILE])) {
                     if (!isset($this->_config['curloptions'][CURLOPT_INFILESIZE])) {
-                        require_once 'Zend/Http/Client/Adapter/Exception.php';
+                        #require_once 'Zend/Http/Client/Adapter/Exception.php';
                         throw new Zend_Http_Client_Adapter_Exception("Cannot set a file-handle for cURL option CURLOPT_INFILE without also setting its size in CURLOPT_INFILESIZE.");
                     }
 
@@ -280,7 +280,7 @@ class Zend_Http_Client_Adapter_Curl implements Zend_Http_Client_Adapter_Interfac
 
             default:
                 // For now, through an exception for unsupported request methods
-                require_once 'Zend/Http/Client/Adapter/Exception.php';
+                #require_once 'Zend/Http/Client/Adapter/Exception.php';
                 throw new Zend_Http_Client_Adapter_Exception("Method currently not supported");
         }
 
@@ -325,7 +325,7 @@ class Zend_Http_Client_Adapter_Curl implements Zend_Http_Client_Adapter_Interfac
             foreach ((array)$this->_config['curloptions'] as $k => $v) {
                 if (!in_array($k, $this->_invalidOverwritableCurlOptions)) {
                     if (curl_setopt($this->_curl, $k, $v) == false) {
-                        require_once 'Zend/Http/Client/Exception.php';
+                        #require_once 'Zend/Http/Client/Exception.php';
                         throw new Zend_Http_Client_Exception(sprintf("Unknown or erroreous cURL option '%s' set", $k));
                     }
                 }
@@ -339,7 +339,7 @@ class Zend_Http_Client_Adapter_Curl implements Zend_Http_Client_Adapter_Interfac
         $request .= $body;
 
         if (empty($this->_response)) {
-            require_once 'Zend/Http/Client/Exception.php';
+            #require_once 'Zend/Http/Client/Exception.php';
             throw new Zend_Http_Client_Exception("Error in cURL request: " . curl_error($this->_curl));
         }
 
@@ -348,12 +348,16 @@ class Zend_Http_Client_Adapter_Curl implements Zend_Http_Client_Adapter_Interfac
             $this->_response = str_ireplace("Transfer-Encoding: chunked\r\n", '', $this->_response);
         }
 
-        // TODO: Probably the pattern for multiple handshake requests is always the same, several HTTP codes in the response. Use that information?
-        // cURL automactically handles Expect: 100-continue; and its responses. Delete the HTTP 100 CONTINUE from a response
-        // because it messes up Zend_Http_Response parsing
-        if (stripos($this->_response, "HTTP/1.1 100 Continue\r\n\r\n") !== false) {
-            $this->_response = str_ireplace("HTTP/1.1 100 Continue\r\n\r\n", '', $this->_response);
-        }
+        // Eliminate multiple HTTP responses.
+        do {
+            $parts  = preg_split('|(?:\r?\n){2}|m', $this->_response, 2);
+            $again  = false;
+
+            if (isset($parts[1]) && preg_match("|^HTTP/1\.[01](.*?)\r\n|mi", $parts[1])) {
+                $this->_response    = $parts[1];
+                $again              = true;
+            }
+        } while ($again);
 
         // cURL automatically handles Proxy rewrites, remove the "HTTP/1.0 200 Connection established" string:
         if (stripos($this->_response, "HTTP/1.0 200 Connection established\r\n\r\n") !== false) {

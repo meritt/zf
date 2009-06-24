@@ -23,7 +23,7 @@
 /**
  * @see Zend_CodeGenerator_Php_Member_Abstract
  */
-require_once 'Zend/CodeGenerator/Php/Member/Abstract.php';
+#require_once 'Zend/CodeGenerator/Php/Member/Abstract.php';
 
 /**
  * @category   Zend

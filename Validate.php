@@ -22,7 +22,7 @@
 /**
  * @see Zend_Validate_Interface
  */
-require_once 'Zend/Validate/Interface.php';
+#require_once 'Zend/Validate/Interface.php';
 
 /**
  * @category   Zend
@@ -142,7 +142,7 @@ class Zend_Validate implements Zend_Validate_Interface
             $className = $namespace . '_' . ucfirst($classBaseName);
             try {
                 if (!class_exists($className)) {
-                    require_once 'Zend/Loader.php';
+                    #require_once 'Zend/Loader.php';
                     Zend_Loader::loadClass($className);
                 }
                 $class = new ReflectionClass($className);
@@ -161,7 +161,7 @@ class Zend_Validate implements Zend_Validate_Interface
                 // fallthrough and continue for missing validation classes
             }
         }
-        require_once 'Zend/Validate/Exception.php';
+        #require_once 'Zend/Validate/Exception.php';
         throw new Zend_Validate_Exception("Validate class not found from basename '$classBaseName'");
     }
 

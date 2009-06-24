@@ -20,7 +20,7 @@
  * @version    $Id$
  */
 
-require_once 'Zend/Http/Response.php';
+#require_once 'Zend/Http/Response.php';
 
 /**
  * @category   Zend

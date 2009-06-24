@@ -16,7 +16,7 @@
  * @package    Zend_Loader
  * @subpackage Autoloader
  * @copyright  Copyright (c) 2005-2008 Zend Technologies USA Inc. (http://www.zend.com)
- * @version    $Id: Autoloader.php 15508 2009-05-11 03:29:01Z matthew $
+ * @version    $Id: Autoloader.php 16029 2009-06-12 18:01:37Z doctorrock83 $
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
 
@@ -197,7 +197,7 @@ class Zend_Loader_Autoloader
     /**
      * Register a namespace to autoload
      * 
-     * @param  string $namespace 
+     * @param  string|array $namespace 
      * @return Zend_Loader_Autoloader
      */
     public function registerNamespace($namespace)
@@ -219,7 +219,7 @@ class Zend_Loader_Autoloader
     /**
      * Unload a registered autoload namespace
      * 
-     * @param  string $namespace 
+     * @param  string|array $namespace 
      * @return Zend_Loader_Autoloader
      */
     public function unregisterNamespace($namespace)

@@ -20,10 +20,10 @@
  */
 
 /** Zend_Captcha_Word */
-require_once 'Zend/Captcha/Word.php';
+#require_once 'Zend/Captcha/Word.php';
 
 /** Zend_Text_Figlet */
-require_once 'Zend/Text/Figlet.php';
+#require_once 'Zend/Text/Figlet.php';
 
 /**
  * Captcha based on figlet text rendering service
@@ -76,7 +76,7 @@ class Zend_Captcha_Figlet extends Zend_Captcha_Word
      * @param mixed $element
      * @return string
      */
-    public function render(Zend_View_Interface $view, $element = null)
+    public function render(Zend_View_Interface $view = null, $element = null)
     {
         return '<pre>'
              . $this->_figlet->render($this->getWord())

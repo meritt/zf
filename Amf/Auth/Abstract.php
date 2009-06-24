@@ -14,19 +14,19 @@
  *
  * @category   Zend
  * @package    Zend_Amf
- * @copyright  Copyright (c) 2005-2008 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright  Copyright (c) 2005-2009 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
 
 /** Zend_Auth_Adapter_Interface */
-require_once 'Zend/Auth/Adapter/Interface.php';
+#require_once 'Zend/Auth/Adapter/Interface.php';
 
 /**
  * Base abstract class for AMF authentication implementation
  *
  * @package    Zend_Amf
  * @subpackage Auth
- * @copyright  Copyright (c) 2005-2008 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright  Copyright (c) 2005-2009 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
 abstract class Zend_Amf_Auth_Abstract implements Zend_Auth_Adapter_Interface

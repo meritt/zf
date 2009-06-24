@@ -23,12 +23,12 @@
 /**
  * Zend_Search_Lucene_Search_Query
  */
-require_once 'Zend/Search/Lucene/Search/Query.php';
+#require_once 'Zend/Search/Lucene/Search/Query.php';
 
 /**
  * Zend_Search_Lucene_Search_Weight
  */
-require_once 'Zend/Search/Lucene/Search/Weight.php';
+#require_once 'Zend/Search/Lucene/Search/Weight.php';
 
 
 /**
@@ -64,7 +64,7 @@ abstract class Zend_Search_Lucene_Search_Query_Preprocessing extends Zend_Search
      */
     public function optimize(Zend_Search_Lucene_Interface $index)
     {
-        require_once 'Zend/Search/Lucene/Exception.php';
+        #require_once 'Zend/Search/Lucene/Exception.php';
         throw new Zend_Search_Lucene_Exception('This query is not intended to be executed.');
     }
 
@@ -76,7 +76,7 @@ abstract class Zend_Search_Lucene_Search_Query_Preprocessing extends Zend_Search
      */
     public function createWeight(Zend_Search_Lucene_Interface $reader)
     {
-        require_once 'Zend/Search/Lucene/Exception.php';
+        #require_once 'Zend/Search/Lucene/Exception.php';
         throw new Zend_Search_Lucene_Exception('This query is not intended to be executed.');
     }
 
@@ -89,7 +89,7 @@ abstract class Zend_Search_Lucene_Search_Query_Preprocessing extends Zend_Search
      */
     public function execute(Zend_Search_Lucene_Interface $reader, $docsFilter = null)
     {
-        require_once 'Zend/Search/Lucene/Exception.php';
+        #require_once 'Zend/Search/Lucene/Exception.php';
         throw new Zend_Search_Lucene_Exception('This query is not intended to be executed.');
     }
 
@@ -102,7 +102,7 @@ abstract class Zend_Search_Lucene_Search_Query_Preprocessing extends Zend_Search
      */
     public function matchedDocs()
     {
-        require_once 'Zend/Search/Lucene/Exception.php';
+        #require_once 'Zend/Search/Lucene/Exception.php';
         throw new Zend_Search_Lucene_Exception('This query is not intended to be executed.');
     }
 
@@ -115,7 +115,7 @@ abstract class Zend_Search_Lucene_Search_Query_Preprocessing extends Zend_Search
      */
     public function score($docId, Zend_Search_Lucene_Interface $reader)
     {
-        require_once 'Zend/Search/Lucene/Exception.php';
+        #require_once 'Zend/Search/Lucene/Exception.php';
         throw new Zend_Search_Lucene_Exception('This query is not intended to be executed.');
     }
 
@@ -126,7 +126,7 @@ abstract class Zend_Search_Lucene_Search_Query_Preprocessing extends Zend_Search
      */
     public function getQueryTerms()
     {
-        require_once 'Zend/Search/Lucene/Exception.php';
+        #require_once 'Zend/Search/Lucene/Exception.php';
         throw new Zend_Search_Lucene_Exception('Rewrite operation has to be done before retrieving query terms.');
     }
 }

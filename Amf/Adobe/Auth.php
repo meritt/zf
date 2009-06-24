@@ -14,18 +14,18 @@
  *
  * @category   Zend
  * @package    Zend_Amf
- * @copyright  Copyright (c) 2005-2008 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright  Copyright (c) 2005-2009 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
 
 /** Zend_Amf_Auth_Abstract */
-require_once 'Zend/Amf/Auth/Abstract.php';
+#require_once 'Zend/Amf/Auth/Abstract.php';
 
 /** Zend_Acl */
-require_once 'Zend/Acl.php';
+#require_once 'Zend/Acl.php';
 
 /** Zend_Auth_Result */
-require_once 'Zend/Auth/Result.php';
+#require_once 'Zend/Auth/Result.php';
 
 /**
  * This class implements authentication against XML file with roles for Flex Builder.
@@ -105,7 +105,7 @@ Roles file format:
             /**
              * @see Zend_Auth_Adapter_Exception
              */
-            require_once 'Zend/Auth/Adapter/Exception.php';
+            #require_once 'Zend/Auth/Adapter/Exception.php';
             throw new Zend_Auth_Adapter_Exception('Username/password should be set');
         }
         

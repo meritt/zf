@@ -23,7 +23,7 @@
 /**
  * @see Zend_Http_Client_Adapter_Socket
  */
-require_once 'Zend/Http/Client/Adapter/Socket.php';
+#require_once 'Zend/Http/Client/Adapter/Socket.php';
 
 /**
  * Extends the default HTTP adapter to handle streams instead of discrete body
@@ -60,7 +60,7 @@ class Zend_Gdata_HttpAdapterStreamingSocket extends Zend_Http_Client_Adapter_Soc
     {
         // Make sure we're properly connected
         if (! $this->socket) {
-            require_once 'Zend/Http/Client/Adapter/Exception.php';
+            #require_once 'Zend/Http/Client/Adapter/Exception.php';
             throw new Zend_Http_Client_Adapter_Exception(
                 'Trying to write but we are not connected');
         }
@@ -68,7 +68,7 @@ class Zend_Gdata_HttpAdapterStreamingSocket extends Zend_Http_Client_Adapter_Soc
         $host = $uri->getHost();
         $host = (strtolower($uri->getScheme()) == 'https' ? $this->config['ssltransport'] : 'tcp') . '://' . $host;
         if ($this->connected_to[0] != $host || $this->connected_to[1] != $uri->getPort()) {
-            require_once 'Zend/Http/Client/Adapter/Exception.php';
+            #require_once 'Zend/Http/Client/Adapter/Exception.php';
             throw new Zend_Http_Client_Adapter_Exception(
                 'Trying to write but we are connected to the wrong host');
         }
@@ -88,20 +88,23 @@ class Zend_Gdata_HttpAdapterStreamingSocket extends Zend_Http_Client_Adapter_Soc
         // Send the headers over
         $request .= "\r\n";
         if (! @fwrite($this->socket, $request)) {
-            require_once 'Zend/Http/Client/Adapter/Exception.php';
+            #require_once 'Zend/Http/Client/Adapter/Exception.php';
             throw new Zend_Http_Client_Adapter_Exception(
                 'Error writing request to server');
         }
 
 
         //read from $body, write to socket
-        while ($body->hasData()) {
-            if (! @fwrite($this->socket, $body->read(self::CHUNK_SIZE))) {
-                require_once 'Zend/Http/Client/Adapter/Exception.php';
+        $chunk = $body->read(self::CHUNK_SIZE);
+        while ($chunk !== FALSE) {
+            if (! @fwrite($this->socket, $chunk)) {
+                #require_once 'Zend/Http/Client/Adapter/Exception.php';
                 throw new Zend_Http_Client_Adapter_Exception(
                     'Error writing request to server');
             }
+            $chunk = $body->read(self::CHUNK_SIZE);
         }
+        $body->closeFileHandle();
         return 'Large upload, request is not cached.';
     }
 }

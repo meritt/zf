@@ -21,7 +21,7 @@
  */
 
 /** Zend_Captcha_Word */
-require_once 'Zend/Captcha/Word.php';
+#require_once 'Zend/Captcha/Word.php';
 
 /**
  * Image-based captcha element
@@ -420,6 +420,12 @@ class Zend_Captcha_Image extends Zend_Captcha_Word
     public function generate()
     {
         $id = parent::generate();
+        $tries = 5;
+        // If there's already such file, try creating a new ID
+        while($tries-- && file_exists($this->getImgDir() . $id . $this->getSuffix())) {
+        	$id = $this->_generateRandomId();
+        	$this->_setId($id);
+        }
         $this->_generateImage($id, $this->getWord());
 
         if (mt_rand(1, $this->getGcFreq()) == 1) {
@@ -440,24 +446,24 @@ class Zend_Captcha_Image extends Zend_Captcha_Word
     protected function _generateImage($id, $word)
     {
         if (!extension_loaded("gd")) {
-            require_once 'Zend/Captcha/Exception.php';
+            #require_once 'Zend/Captcha/Exception.php';
             throw new Zend_Captcha_Exception("Image CAPTCHA requires GD extension");
         }
 
         if (!function_exists("imagepng")) {
-            require_once 'Zend/Captcha/Exception.php';
+            #require_once 'Zend/Captcha/Exception.php';
             throw new Zend_Captcha_Exception("Image CAPTCHA requires PNG support");
         }
 
         if (!function_exists("imageftbbox")) {
-            require_once 'Zend/Captcha/Exception.php';
+            #require_once 'Zend/Captcha/Exception.php';
             throw new Zend_Captcha_Exception("Image CAPTCHA requires FT fonts support");
         }
 
         $font = $this->getFont();
 
         if (empty($font)) {
-            require_once 'Zend/Captcha/Exception.php';
+            #require_once 'Zend/Captcha/Exception.php';
             throw new Zend_Captcha_Exception("Image CAPTCHA requires font");
         }
 
@@ -471,7 +477,7 @@ class Zend_Captcha_Image extends Zend_Captcha_Word
         } else {
             $img = imagecreatefrompng($this->_startImage);
             if(!$img) {
-                require_once 'Zend/Captcha/Exception.php';
+                #require_once 'Zend/Captcha/Exception.php';
                 throw new Zend_Captcha_Exception("Can not load start image");
             }
             $w = imagesx($img);
@@ -587,8 +593,8 @@ class Zend_Captcha_Image extends Zend_Captcha_Word
      * @param mixed $element
      * @return string
      */
-    public function render(Zend_View_Interface $view, $element = null)
+    public function render(Zend_View_Interface $view = null, $element = null)
     {
-        return '<img alt="'.$this->getImgAlt().'" src="' . $this->getImgUrl() . $this->getId() . $this->getSuffix() . '"/><br/>';
+        return '<img width="'.$this->getWidth().'" height="'.$this->getHeight().'" alt="'.$this->getImgAlt().'" src="' . $this->getImgUrl() . $this->getId() . $this->getSuffix() . '"/><br/>';
     }
 }

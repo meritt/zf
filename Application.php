@@ -70,7 +70,7 @@ class Zend_Application
     {
         $this->_environment = (string) $environment;
 
-        require_once 'Zend/Loader/Autoloader.php';
+        #require_once 'Zend/Loader/Autoloader.php';
         $this->_autoloader = Zend_Loader_Autoloader::getInstance();
 
         if (null !== $options) {
@@ -287,7 +287,7 @@ class Zend_Application
         }
 
         if (!class_exists($class, false)) {
-            require_once $path;
+            #require_once $path;
         }
         $this->_bootstrap = new $class($this);
         

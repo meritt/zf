@@ -22,7 +22,7 @@
 /**
  * @see Zend_Http_Client
  */
-require_once 'Zend/Http/Client.php';
+#require_once 'Zend/Http/Client.php';
 
 /**
  * This class allows Nirvanix authentication credentials to be specified
@@ -87,7 +87,7 @@ class Zend_Service_Nirvanix
         $options = array_merge($this->_options, $options);
 
         if (!class_exists($class)) {
-            require_once 'Zend/Loader.php';
+            #require_once 'Zend/Loader.php';
             Zend_Loader::loadClass($class);
         }
         return new $class($options);

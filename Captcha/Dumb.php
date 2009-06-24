@@ -20,7 +20,7 @@
  */
 
 /** Zend_Captcha_Word */
-require_once 'Zend/Captcha/Word.php';
+#require_once 'Zend/Captcha/Word.php';
 
 /**
  * Example dumb word-based captcha
@@ -43,7 +43,7 @@ class Zend_Captcha_Dumb extends Zend_Captcha_Word
      * @param  mixed $element
      * @return string
      */
-    public function render(Zend_View_Interface $view, $element = null)
+    public function render(Zend_View_Interface $view = null, $element = null)
     {
         return 'Please type this word backwards: <b>'
              . strrev($this->getWord())

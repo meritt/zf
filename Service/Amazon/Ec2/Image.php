@@ -20,7 +20,7 @@
  * @version    $Id$
  */
 
-require_once 'Zend/Service/Amazon/Ec2/Abstract.php';
+#require_once 'Zend/Service/Amazon/Ec2/Abstract.php';
 
 /**
  * An Amazon EC2 interface to register, describe and deregister Amamzon Machine Instances (AMI)
@@ -244,7 +244,7 @@ class Zend_Service_Amazon_Ec2_Image extends Zend_Service_Amazon_Ec2_Abstract
                 $parmas['ProductCode.1'] = $productCode;
                 break;
             default:
-                require_once 'Zend/Service/Amazon/Ec2/Exception.php';
+                #require_once 'Zend/Service/Amazon/Ec2/Exception.php';
                 throw new Zend_Service_Amazon_Ec2_Exception('Invalid Attribute Passed In.  Valid Image Attributes are launchPermission and productCode.');
                 break;
         }
