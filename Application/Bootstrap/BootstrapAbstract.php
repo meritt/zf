@@ -15,9 +15,9 @@
  * @category   Zend
  * @package    Zend_Application
  * @subpackage Bootstrap
- * @copyright  Copyright (c) 2005-2008 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright  Copyright (c) 2005-2009 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
- * @version    $Id: BootstrapAbstract.php 15556 2009-05-12 14:45:23Z matthew $
+ * @version    $Id: BootstrapAbstract.php 16555 2009-07-07 17:02:08Z doctorrock83 $
  */
 
 /**
@@ -28,7 +28,7 @@
  * @category   Zend
  * @package    Zend_Application
  * @subpackage Bootstrap
- * @copyright  Copyright (c) 2005-2008 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright  Copyright (c) 2005-2009 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
 abstract class Zend_Application_Bootstrap_BootstrapAbstract
@@ -532,6 +532,30 @@ abstract class Zend_Application_Bootstrap_BootstrapAbstract
             return $container->{$resource};
         }
         return null;
+    }
+
+    /**
+     * Implement PHP's magic to retrieve a ressource
+     * in the bootstrap
+     *
+     * @param string $prop
+     * @return null|mixed
+     */
+    public function __get($prop)
+    {
+        return $this->getResource($prop);
+    }
+
+    /**
+     * Implement PHP's magic to ask for the
+     * existence of a ressource in the bootstrap
+     * 
+     * @param string $prop
+     * @return bool
+     */
+    public function __isset($prop)
+    {
+        return $this->hasResource($prop);
     }
 
     /**

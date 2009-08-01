@@ -14,15 +14,15 @@
  *
  * @category   Zend
  * @package    Zend_Application
- * @copyright  Copyright (c) 2005-2008 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright  Copyright (c) 2005-2009 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
- * @version    $Id: Application.php 15556 2009-05-12 14:45:23Z matthew $
+ * @version    $Id: Application.php 16290 2009-06-25 20:14:50Z matthew $
  */
 
 /**
  * @category   Zend
  * @package    Zend_Application
- * @copyright  Copyright (c) 2005-2008 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright  Copyright (c) 2005-2009 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
 class Zend_Application
@@ -288,8 +288,15 @@ class Zend_Application
 
         if (!class_exists($class, false)) {
             // require_once $path;
+            if (!class_exists($class, false)) {
+                throw new Zend_Application_Exception('Bootstrap class not found');
+            }
         }
         $this->_bootstrap = new $class($this);
+
+        if (!$this->_bootstrap instanceof Zend_Application_Bootstrap_Bootstrapper) {
+            throw new Zend_Application_Exception('Bootstrap class does not implement Zend_Application_Bootstrap_Bootstrapper');
+        }
         
         return $this;
     }
