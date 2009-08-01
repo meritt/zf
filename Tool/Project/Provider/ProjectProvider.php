@@ -19,10 +19,10 @@
  */
 
 /** Zend_Tool_Project_Provider_Abstract */
-#require_once 'Zend/Tool/Project/Provider/Abstract.php';
+// require_once 'Zend/Tool/Project/Provider/Abstract.php';
 
 /** Zend_Tool_Project_Provider_Exception */
-#require_once 'Zend/Tool/Project/Provider/Exception.php';
+// require_once 'Zend/Tool/Project/Provider/Exception.php';
 
 /**
  * @category   Zend
@@ -48,7 +48,7 @@ class Zend_Tool_Project_Provider_ProjectProvider extends Zend_Tool_Project_Provi
             /**
              * @see Zend_Tool_Project_Provider_Exception
              */
-            #require_once 'Zend/Tool/Project/Provider/Exception.php';
+            // require_once 'Zend/Tool/Project/Provider/Exception.php';
             throw new Zend_Tool_Project_Provider_Exception('Zend_Tool_Project_Provider_Controller::createResource() expects \"projectProviderName\" is the name of a project provider resource to create.');
         }
 

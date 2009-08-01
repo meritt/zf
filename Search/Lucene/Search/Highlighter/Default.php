@@ -20,7 +20,7 @@
  */
 
 /** Zend_Search_Lucene_Search_Highlighter_Interface */
-#require_once 'Zend/Search/Lucene/Search/Highlighter/Interface.php';
+// require_once 'Zend/Search/Lucene/Search/Highlighter/Interface.php';
 /**
  * @category   Zend
  * @package    Zend_Search_Lucene

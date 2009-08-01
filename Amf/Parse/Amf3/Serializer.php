@@ -20,10 +20,10 @@
  */
 
 /** Zend_Amf_Parse_Serializer */
-#require_once 'Zend/Amf/Parse/Serializer.php';
+// require_once 'Zend/Amf/Parse/Serializer.php';
 
 /** Zend_Amf_Parse_TypeLoader */
-#require_once 'Zend/Amf/Parse/TypeLoader.php';
+// require_once 'Zend/Amf/Parse/TypeLoader.php';
 
 /**
  * Detect PHP object type and convert it to a corresponding AMF3 object type
@@ -102,7 +102,7 @@ class Zend_Amf_Parse_Amf3_Serializer extends Zend_Amf_Parse_Serializer
                     $this->writeXml($data);
                     break;
                 default:
-                    #require_once 'Zend/Amf/Exception.php';
+                    // require_once 'Zend/Amf/Exception.php';
                     throw new Zend_Amf_Exception('Unknown Type Marker: ' . $markerType);
             }
         } else {
@@ -150,7 +150,7 @@ class Zend_Amf_Parse_Amf3_Serializer extends Zend_Amf_Parse_Serializer
                     }
                     break;
                 default: 
-                    #require_once 'Zend/Amf/Exception.php';
+                    // require_once 'Zend/Amf/Exception.php';
                     throw new Zend_Amf_Exception('Unsupported data type: ' . gettype($data));
              }
             $this->writeTypeMarker($data, $markerType);
@@ -247,7 +247,7 @@ class Zend_Amf_Parse_Amf3_Serializer extends Zend_Amf_Parse_Serializer
         } else if ($data instanceof Zend_Amf_Value_ByteArray) {
             $data = $data->getData();
         } else {
-            #require_once 'Zend/Amf/Exception.php';
+            // require_once 'Zend/Amf/Exception.php';
             throw new Zend_Amf_Exception('Invalid ByteArray specified; must be a string or Zend_Amf_Value_ByteArray');
         }
         
@@ -275,7 +275,7 @@ class Zend_Amf_Parse_Amf3_Serializer extends Zend_Amf_Parse_Serializer
         } else if ($xml instanceof SimpleXMLElement) {
             $xml = $xml->asXML();
         } else {
-            #require_once 'Zend/Amf/Exception.php';
+            // require_once 'Zend/Amf/Exception.php';
             throw new Zend_Amf_Exception('Invalid xml specified; must be a DOMDocument or SimpleXMLElement');
         }
         
@@ -301,7 +301,7 @@ class Zend_Amf_Parse_Amf3_Serializer extends Zend_Amf_Parse_Serializer
         } elseif ($date instanceof Zend_Date) {
             $dateString = $date->toString('U') * 1000;
         } else {
-            #require_once 'Zend/Amf/Exception.php';
+            // require_once 'Zend/Amf/Exception.php';
             throw new Zend_Amf_Exception('Invalid date specified; must be a string DateTime or Zend_Date object');
         }
 
@@ -486,15 +486,15 @@ class Zend_Amf_Parse_Amf3_Serializer extends Zend_Amf_Parse_Serializer
                     $this->writeString('');
                     break;
                 case Zend_Amf_Constants::ET_EXTERNAL:
-                    #require_once 'Zend/Amf/Exception.php';
+                    // require_once 'Zend/Amf/Exception.php';
                     throw new Zend_Amf_Exception('External Object Encoding not implemented');
                     break;
                 default: 
-                    #require_once 'Zend/Amf/Exception.php';
+                    // require_once 'Zend/Amf/Exception.php';
                     throw new Zend_Amf_Exception('Unknown Object Encoding type: ' . $encoding);
             }
         } catch (Exception $e) {
-            #require_once 'Zend/Amf/Exception.php';
+            // require_once 'Zend/Amf/Exception.php';
             throw new Zend_Amf_Exception('Unable to writeObject output: ' . $e->getMessage());
         }
 

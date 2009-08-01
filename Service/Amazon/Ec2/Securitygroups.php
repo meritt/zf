@@ -20,7 +20,7 @@
  * @version    $Id$
  */
 
-#require_once 'Zend/Service/Amazon/Ec2/Abstract.php';
+// require_once 'Zend/Service/Amazon/Ec2/Abstract.php';
 
 /**
  * An Amazon EC2 interface to create, delete, describe, grand and revoke sercurity permissions.

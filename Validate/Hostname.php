@@ -22,17 +22,17 @@
 /**
  * @see Zend_Validate_Abstract
  */
-#require_once 'Zend/Validate/Abstract.php';
+// require_once 'Zend/Validate/Abstract.php';
 
 /**
  * @see Zend_Loader
  */
-#require_once 'Zend/Loader.php';
+// require_once 'Zend/Loader.php';
 
 /**
  * @see Zend_Validate_Ip
  */
-#require_once 'Zend/Validate/Ip.php';
+// require_once 'Zend/Validate/Ip.php';
 
 /**
  * Please note there are two standalone test scripts for testing IDN characters due to problems
@@ -496,7 +496,7 @@ class Zend_Validate_Hostname extends Zend_Validate_Abstract
                         foreach($regexChars as $regexKey => $regexChar) {
                             $status = @preg_match($regexChar, $domainPart);
                             if ($status === false) {
-                                #require_once 'Zend/Validate/Exception.php';
+                                // require_once 'Zend/Validate/Exception.php';
                                 throw new Zend_Validate_Exception('Internal error: DNS validation failed');
                             } elseif ($status !== 0) {
                                 $length = 63;
@@ -549,7 +549,7 @@ class Zend_Validate_Hostname extends Zend_Validate_Abstract
              * Regex error
              * @see Zend_Validate_Exception
              */
-            #require_once 'Zend/Validate/Exception.php';
+            // require_once 'Zend/Validate/Exception.php';
             throw new Zend_Validate_Exception('Internal error: local network name validation failed');
         }
 

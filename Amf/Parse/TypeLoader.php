@@ -19,11 +19,11 @@
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
 
-require_once 'Zend/Amf/Value/Messaging/AcknowledgeMessage.php';
-require_once 'Zend/Amf/Value/Messaging/AsyncMessage.php';
-require_once 'Zend/Amf/Value/Messaging/CommandMessage.php';
-require_once 'Zend/Amf/Value/Messaging/ErrorMessage.php';
-require_once 'Zend/Amf/Value/Messaging/RemotingMessage.php';
+// require_once 'Zend/Amf/Value/Messaging/AcknowledgeMessage.php';
+// require_once 'Zend/Amf/Value/Messaging/AsyncMessage.php';
+// require_once 'Zend/Amf/Value/Messaging/CommandMessage.php';
+// require_once 'Zend/Amf/Value/Messaging/ErrorMessage.php';
+// require_once 'Zend/Amf/Value/Messaging/RemotingMessage.php';
 
 /**
  * Loads a local class and executes the instantiation of that class.
@@ -186,21 +186,21 @@ final class Zend_Amf_Parse_TypeLoader
     public static function handleResource($resource)
     {
 		if(!self::$_resourceLoader) {
-			require_once 'Zend/Amf/Exception.php';
+			// require_once 'Zend/Amf/Exception.php';
 			throw new Zend_Amf_Exception('Unable to handle resources - resource plugin loader not set');
 		}
     	try {
     		while(is_resource($resource)) {
 				$resclass = self::getResourceParser($resource);
 				if(!$resclass) {
-					require_once 'Zend/Amf/Exception.php';
+					// require_once 'Zend/Amf/Exception.php';
 					throw new Zend_Amf_Exception('Can not serialize resource type: '. get_resource_type($resource));
 				}
 				$parser = new $resclass();
 				if(is_callable(array($parser, 'parse'))) {
 					$resource = $parser->parse($resource);
 				} else {
-					require_once 'Zend/Amf/Exception.php';
+					// require_once 'Zend/Amf/Exception.php';
 					throw new Zend_Amf_Exception("Could not call parse() method on class $resclass");
 				}
     		}
@@ -208,7 +208,7 @@ final class Zend_Amf_Parse_TypeLoader
 		} catch(Zend_Amf_Exception $e) {
 			throw $e;
 		} catch(Exception $e) {
-			require_once 'Zend/Amf/Exception.php';
+			// require_once 'Zend/Amf/Exception.php';
 			throw new Zend_Amf_Exception('Can not serialize resource type: '. get_resource_type($resource));
 		}
     }

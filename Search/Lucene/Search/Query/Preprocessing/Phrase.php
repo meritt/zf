@@ -21,22 +21,22 @@
 
 
 /** Zend_Search_Lucene_Search_Query_Processing */
-#require_once 'Zend/Search/Lucene/Search/Query/Preprocessing.php';
+// require_once 'Zend/Search/Lucene/Search/Query/Preprocessing.php';
 
 /** Zend_Search_Lucene_Search_Query_Phrase */
-#require_once 'Zend/Search/Lucene/Search/Query/Phrase.php';
+// require_once 'Zend/Search/Lucene/Search/Query/Phrase.php';
 
 /** Zend_Search_Lucene_Search_Query_Insignificant */
-#require_once 'Zend/Search/Lucene/Search/Query/Insignificant.php';
+// require_once 'Zend/Search/Lucene/Search/Query/Insignificant.php';
 
 /** Zend_Search_Lucene_Search_Query_Empty */
-#require_once 'Zend/Search/Lucene/Search/Query/Empty.php';
+// require_once 'Zend/Search/Lucene/Search/Query/Empty.php';
 
 /** Zend_Search_Lucene_Search_Query_Term */
-#require_once 'Zend/Search/Lucene/Search/Query/Term.php';
+// require_once 'Zend/Search/Lucene/Search/Query/Term.php';
 
 /** Zend_Search_Lucene_Index_Term */
-#require_once 'Zend/Search/Lucene/Index/Term.php';
+// require_once 'Zend/Search/Lucene/Index/Term.php';
 
 
 /**
@@ -140,7 +140,7 @@ class Zend_Search_Lucene_Search_Query_Preprocessing_Phrase extends Zend_Search_L
 // They are either removed by text analyzer or used as a part of keyword for keyword fields
 //
 //        if (strpos($this->_phrase, '?') !== false || strpos($this->_phrase, '*') !== false) {
-//            #require_once 'Zend/Search/Lucene/Search/QueryParserException.php';
+//            // require_once 'Zend/Search/Lucene/Search/QueryParserException.php';
 //            throw new Zend_Search_Lucene_Search_QueryParserException('Wildcards are only allowed in a single terms.');
 //        }
 
