@@ -16,7 +16,7 @@
  * @package    Zend_Feed_Reader
  * @copyright  Copyright (c) 2005-2009 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
- * @version    $Id: Reader.php 16953 2009-07-22 11:57:25Z padraic $
+ * @version    $Id: Reader.php 17391 2009-08-05 11:27:52Z padraic $
  */
 
 /**
@@ -244,7 +244,7 @@ class Zend_Feed_Reader
                 }
             }
             $response = $client->request('GET');
-            if ($response->getStatus() !== 200 || $response->getStatus() !== 304) {
+            if ($response->getStatus() !== 200 && $response->getStatus() !== 304) {
                 // require_once 'Zend/Feed/Exception.php';
                 throw new Zend_Feed_Exception('Feed failed to load, got response code ' . $response->getStatus());
             }

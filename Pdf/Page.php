@@ -16,7 +16,7 @@
  * @package    Zend_Pdf
  * @copyright  Copyright (c) 2005-2009 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
- * @version    $Id: Page.php 17245 2009-07-28 13:59:45Z alexander $
+ * @version    $Id: Page.php 17532 2009-08-10 19:04:14Z alexander $
  */
 
 /** Zend_Pdf_Resource_Font */
@@ -1455,13 +1455,13 @@ class Zend_Pdf_Page
         }
 
         if ($this->_pageDictionary->Annots === null) {
-    		$this->_pageDictionary->touch();
-    		$this->_pageDictionary->Annots = new Zend_Pdf_Element_Array();
-    	} else {
-    		$this->_pageDictionary->Annots->touch();
-    	}
+            $this->_pageDictionary->touch();
+            $this->_pageDictionary->Annots = new Zend_Pdf_Element_Array();
+        } else {
+            $this->_pageDictionary->Annots->touch();
+        }
 
-    	$this->_pageDictionary->Annots->items[] = $annotationDictionary;
+        $this->_pageDictionary->Annots->items[] = $annotationDictionary;
 
         $annotationDictionary->touch();
         $annotationDictionary->P = $this->_pageDictionary;

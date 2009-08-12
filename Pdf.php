@@ -16,7 +16,7 @@
  * @package    Zend_Pdf
  * @copyright  Copyright (c) 2005-2009 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
- * @version    $Id: Pdf.php 17238 2009-07-28 11:27:47Z alexander $
+ * @version    $Id: Pdf.php 17530 2009-08-10 18:47:29Z alexander $
  */
 
 /** Zend_Pdf_Page */
@@ -602,7 +602,7 @@ class Zend_Pdf
         $pagesContainer = $root->Pages;
 
         $pagesContainer->touch();
-        $pagesContainer->Kids->items->clear();
+        $pagesContainer->Kids->items = array();
 
         foreach ($this->pages as $page ) {
             $page->render($this->_objFactory);
@@ -692,8 +692,7 @@ class Zend_Pdf
     {
         ksort($this->_namedTargets, SORT_STRING);
 
-        $destArray = $this->_objFactory->newObject(new Zend_Pdf_Element_Array());
-        $destArrayItems = &$destArray->items;
+        $destArrayItems = array();
         foreach ($this->_namedTargets as $name => $destination) {
             $destArrayItems[] = new Zend_Pdf_Element_String($name);
 
@@ -704,6 +703,7 @@ class Zend_Pdf
                 throw new Zend_Pdf_Exception('PDF named destinations must be a Zend_Pdf_Target object.');
             }
         }
+        $destArray = $this->_objFactory->newObject(new Zend_Pdf_Element_Array($destArrayItems));
 
         $DestTree = $this->_objFactory->newObject(new Zend_Pdf_Element_Dictionary());
         $DestTree->Names = $destArray;

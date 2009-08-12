@@ -16,7 +16,7 @@
  * @package    Zend_Pdf
  * @copyright  Copyright (c) 2005-2009 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
- * @version    $Id: StringParser.php 16541 2009-07-07 06:59:03Z bkarwin $
+ * @version    $Id: StringParser.php 17532 2009-08-10 19:04:14Z alexander $
  */
 
 
@@ -64,9 +64,6 @@
 
 /** Zend_Pdf_ElementFactory_Interface */
 // require_once 'Zend/Pdf/ElementFactory/Interface.php';
-
-/** Zend_Pdf_PhpArray */
-// require_once 'Zend/Pdf/PhpArray.php';
 
 
 /**
@@ -246,7 +243,21 @@ class Zend_Pdf_StringParser
      */
     public function readLexeme()
     {
-        $this->skipWhiteSpace();
+        // $this->skipWhiteSpace();
+        while (true) {
+            $this->offset += strspn($this->data, "\x00\t\n\f\r ", $this->offset);
+
+            if ($this->data[$this->offset] == '%') {
+                preg_match('/[\r\n]/', $this->data, $matches, PREG_OFFSET_CAPTURE, $this->offset);
+                if (count($matches) > 0) {
+                    $this->offset += strlen($matches[0][0]) + $matches[0][1];
+                } else {
+                    $this->offset = strlen($this->data);
+                }
+            } else {
+                break;
+            }
+        }
 
         if ($this->offset >= strlen($this->data)) {
             return '';

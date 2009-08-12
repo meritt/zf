@@ -32,7 +32,7 @@
  * @subpackage Element
  * @copyright  Copyright (c) 2005-2009 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
- * @version    $Id: Element.php 16859 2009-07-20 00:55:03Z yoshida@zend.co.jp $
+ * @version    $Id: Element.php 17506 2009-08-10 11:30:24Z yoshida@zend.co.jp $
  */
 class Zend_Form_Element implements Zend_Validate_Interface
 {
@@ -990,7 +990,9 @@ class Zend_Form_Element implements Zend_Validate_Interface
      *
      * Otherwise, the path prefix is set on the appropriate plugin loader.
      *
+     * @param  string $prefix
      * @param  string $path
+     * @param  string $type
      * @return Zend_Form_Element
      * @throws Zend_Form_Exception for invalid type
      */

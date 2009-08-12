@@ -16,7 +16,7 @@
  * @category   Zend
  * @package    Zend_Http
  * @subpackage Client
- * @version    $Id: Client.php 17124 2009-07-26 09:46:42Z shahar $
+ * @version    $Id: Client.php 17374 2009-08-04 12:43:04Z shahar $
  * @copyright  Copyright (c) 2005-2009 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
@@ -401,7 +401,7 @@ class Zend_Http_Client
 
             // Else, set the header
             } else {
-                // Header names are storred lowercase internally.
+                // Header names are stored lowercase internally.
                 if (is_string($value)) {
                     $value = trim($value);
                 }

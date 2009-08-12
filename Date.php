@@ -16,7 +16,7 @@
  * @package   Zend_Date
  * @copyright Copyright (c) 2005-2009 Zend Technologies USA Inc. (http://www.zend.com)
  * @license   http://framework.zend.com/license/new-bsd     New BSD License
- * @version   $Id: Date.php 16563 2009-07-08 19:50:55Z thomas $
+ * @version   $Id: Date.php 17526 2009-08-10 16:33:35Z alexander $
  */
 
 /**
@@ -136,11 +136,23 @@ class Zend_Date extends Zend_Date_DateObject
      */
     public function __construct($date = null, $part = null, $locale = null)
     {
-        if (($date !== null) and !($date instanceof Zend_TimeSync_Protocol) and (Zend_Locale::isLocale($date, true, false))) {
+        if (is_object($date) and !($date instanceof Zend_TimeSync_Protocol) and
+            !($date instanceof Zend_Date)) {
+            if ($locale instanceof Zend_Locale) {
+                $locale = $date;
+                $date   = null;
+                $part   = null;
+            } else {
+                $date = (string) $date;
+            }
+        }
+
+        if (($date !== null) and !is_array($date) and !($date instanceof Zend_TimeSync_Protocol) and
+            !($date instanceof Zend_Date) and !defined($date) and Zend_Locale::isLocale($date, true, false)) {
             $locale = $date;
-            $date = null;
-            $part = null;
-        } else if (($part !== null) and (Zend_Locale::isLocale($part, null, false))) {
+            $date   = null;
+            $part   = null;
+        } else if (($part !== null) and !defined($part) and Zend_Locale::isLocale($date, true, false)) {
             $locale = $part;
             $part   = null;
         }
@@ -394,12 +406,32 @@ class Zend_Date extends Zend_Date_DateObject
      */
     public function toString($format = null, $type = null, $locale = null)
     {
-        if ((strlen($format) != 2) and ($format !== null) and (Zend_Locale::isLocale($format, null, false))) {
+        if (is_object($format)) {
+            if ($format instanceof Zend_Locale) {
+                $locale = $format;
+                $format = null;
+            } else {
+                $format = (string) $format;
+            }
+        }
+
+        if (is_object($type)) {
+            if ($type instanceof Zend_Locale) {
+                $locale = $type;
+                $type   = null;
+            } else {
+                $type = (string) $type;
+            }
+        }
+
+        if (($format !== null) and !defined($format) and
+            ($format != 'ee') and ($format != 'ss') and Zend_Locale::isLocale($format, null, false)) {
             $locale = $format;
             $format = null;
         }
 
-        if (($type !== null) and (Zend_Locale::isLocale($type, null, false))) {
+        if (($type !== null) and ($type != 'php') and ($type != 'iso') and
+            Zend_Locale::isLocale($type, null, false)) {
             $locale = $type;
             $type = null;
         }
@@ -4614,6 +4646,7 @@ class Zend_Date extends Zend_Date_DateObject
         $date      = new self($parsed, null, $locale);
         $timestamp = $date->mktime($parsed['hour'], $parsed['minute'], $parsed['second'],
                                    $parsed['month'], $parsed['day'], $parsed['year']);
+
         if ($parsed['year'] != $date->date('Y', $timestamp)) {
             // Given year differs from parsed year
             return false;
