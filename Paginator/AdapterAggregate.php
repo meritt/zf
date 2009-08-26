@@ -13,39 +13,28 @@
  * to license@zend.com so we can send you a copy immediately.
  *
  * @category   Zend
- * @package    Zend_Version
+ * @package    Paginator
+ * @subpackage Adapter
  * @copyright  Copyright (c) 2005-2009 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
- * @version    $Id: Version.php 17799 2009-08-24 20:30:08Z alexander $
+ * @version    $Id: AdapterAggregate.php 17631 2009-08-16 12:29:46Z norm2782 $
  */
 
 /**
- * Class to store and retrieve the version of Zend Framework.
+ * Interface that aggregates a Zend_Paginator_Adapter_Abstract just like IteratorAggregate does for Iterators.
  *
  * @category   Zend
- * @package    Zend_Version
+ * @package    Paginator
+ * @subpackage Adapter
  * @copyright  Copyright (c) 2005-2009 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
-final class Zend_Version
+interface Zend_Paginator_AdapterAggregate
 {
     /**
-     * Zend Framework version identification - see compareVersion()
-     */
-    const VERSION = '1.9.2';
-
-    /**
-     * Compare the specified Zend Framework version string $version
-     * with the current Zend_Version::VERSION of Zend Framework.
+     * Return a fully configured Paginator Adapter from this method.
      *
-     * @param  string  $version  A version string (e.g. "0.7.1").
-     * @return boolean           -1 if the $version is older,
-     *                           0 if they are the same,
-     *                           and +1 if $version is newer.
-     *
+     * @return Zend_Paginator_Adapter_Abstract
      */
-    public static function compareVersion($version)
-    {
-        return version_compare($version, self::VERSION);
-    }
+    public function getPaginatorAdapter();
 }
