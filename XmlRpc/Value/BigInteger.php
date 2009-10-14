@@ -17,14 +17,14 @@
  * @subpackage Value
  * @copyright  Copyright (c) 2005-2009 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
- * @version    $Id: Integer.php 18443 2009-09-30 13:35:47Z lars $
+ * @version    $Id: Integer.php 17753 2009-08-22 16:09:37Z lars $
  */
 
 
 /**
- * Zend_XmlRpc_Value_Scalar
+ * Zend_XmlRpc_Value_Integer
  */
-// require_once 'Zend/XmlRpc/Value/Scalar.php';
+// require_once 'Zend/XmlRpc/Value/Integer.php';
 
 
 /**
@@ -34,32 +34,32 @@
  * @copyright  Copyright (c) 2005-2009 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
-class Zend_XmlRpc_Value_Integer extends Zend_XmlRpc_Value_Scalar
+class Zend_XmlRpc_Value_BigInteger extends Zend_XmlRpc_Value_Integer
 {
+    /**
+     * @var Zend_Crypt_Math_BigInteger
+     */
+    protected $_integer;
 
     /**
-     * Set the value of an integer native type
-     *
-     * @param int $value
+     * @param mixed $value
      */
     public function __construct($value)
     {
-        if ($value > PHP_INT_MAX) {
-            // require_once 'Zend/XmlRpc/Value/Exception.php';
-            throw new Zend_XmlRpc_Value_Exception('Overlong integer given');
-        }
+        // require_once 'Zend/Crypt/Math/BigInteger.php';
+        $this->_integer = new Zend_Crypt_Math_BigInteger();
+        $this->_value = $this->_integer->init($this->_value);
 
-        $this->_type = self::XMLRPC_TYPE_INTEGER;
-        $this->_value = (int)$value;    // Make sure this value is integer
+        $this->_type = self::XMLRPC_TYPE_I8;
     }
 
     /**
-     * Return the value of this object, convert the XML-RPC native integer value into a PHP integer
+     * Return bigint value object
      *
-     * @return int
+     * @return Zend_Crypt_Math_BigInteger
      */
     public function getValue()
     {
-        return $this->_value;
+        return $this->_integer;
     }
 }
