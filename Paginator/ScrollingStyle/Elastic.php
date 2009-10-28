@@ -16,7 +16,7 @@
  * @package    Zend_Paginator
  * @copyright  Copyright (c) 2005-2009 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
- * @version    $Id: Elastic.php 16215 2009-06-21 19:36:07Z thomas $
+ * @version    $Id: Elastic.php 18553 2009-10-15 17:56:08Z norm2782 $
  */
 
 /**
@@ -54,6 +54,8 @@ class Zend_Paginator_ScrollingStyle_Elastic extends Zend_Paginator_ScrollingStyl
 
         if ($originalPageRange + $pageNumber - 1 < $pageRange) {
             $pageRange = $originalPageRange + $pageNumber - 1;
+        } else if ($originalPageRange + $pageNumber - 1 > count($paginator)) {
+            $pageRange = $originalPageRange + count($paginator) - $pageNumber;
         }
         
         return parent::getPages($paginator, $pageRange);

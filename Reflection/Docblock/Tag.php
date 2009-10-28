@@ -16,7 +16,7 @@
  * @package    Zend_Reflection
  * @copyright  Copyright (c) 2005-2009 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
- * @version    $Id: Tag.php 18160 2009-09-17 12:03:29Z carlton $
+ * @version    $Id: Tag.php 18675 2009-10-23 19:46:09Z beberlei $
  */
 
 /** Zend_Loader */
@@ -96,6 +96,9 @@ class Zend_Reflection_Docblock_Tag implements Reflector
      */
     public function __toString()
     {
+        $str = "Docblock Tag [ * @".$this->_name." ]".PHP_EOL;
+
+        return $str;
     }
     
     /**

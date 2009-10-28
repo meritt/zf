@@ -17,7 +17,7 @@
  * @subpackage Adapter
  * @copyright  Copyright (c) 2005-2009 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
- * @version    $Id: Memcacheq.php 17241 2009-07-28 13:01:20Z matthew $
+ * @version    $Id: Memcacheq.php 18701 2009-10-26 13:03:47Z matthew $
  */
 
 /**
@@ -279,6 +279,7 @@ class Zend_Queue_Adapter_Memcacheq extends Zend_Queue_Adapter_AdapterAbstract
         if ($maxMessages === null) {
             $maxMessages = 1;
         }
+
         if ($timeout === null) {
             $timeout = self::RECEIVE_TIMEOUT_DEFAULT;
         }
@@ -287,13 +288,15 @@ class Zend_Queue_Adapter_Memcacheq extends Zend_Queue_Adapter_AdapterAbstract
         }
 
         $msgs = array();
-        for ($i = 0; $i < $maxMessages; $i++) {
-            $data = array(
-                'handle' => md5(uniqid(rand(), true)),
-                'body'   => $this->_cache->get($queue->getName()),
-            );
+        if ($maxMessages > 0 ) {
+            for ($i = 0; $i < $maxMessages; $i++) {
+                $data = array(
+                    'handle' => md5(uniqid(rand(), true)),
+                    'body'   => $this->_cache->get($queue->getName()),
+                );
 
-            $msgs[] = $data;
+                $msgs[] = $data;
+            }
         }
 
         $options = array(

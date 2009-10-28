@@ -17,7 +17,7 @@
  * @subpackage View
  * @copyright  Copyright (c) 2005-2009 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
- * @version    $Id: ComboBox.php 16204 2009-06-21 18:58:29Z thomas $
+ * @version    $Id: ComboBox.php 18549 2009-10-15 17:00:16Z matthew $
  */
 
 /** Zend_Dojo_View_Helper_Dijit */
@@ -145,7 +145,7 @@ class Zend_Dojo_View_Helper_ComboBox extends Zend_Dojo_View_Helper_Dijit
                     . 'new ' . $storeParams['dojoType'] . '('
                     .     Zend_Json::encode($extraParams)
                     . ");\n"
-                    . 'dijit.byId("' . $id . '").attr("store", ' 
+                    . 'dijit.byId("' . $this->_normalizeId($id) . '").attr("store", '
                     . $storeParams['jsId'] . ');';
                 $js = "function() {\n$js\n}";
                 $this->dojo->prependOnLoad($js);

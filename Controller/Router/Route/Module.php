@@ -16,7 +16,7 @@
  * @package    Zend_Controller
  * @subpackage Router
  * @copyright  Copyright (c) 2005-2009 Zend Technologies USA Inc. (http://www.zend.com)
- * @version    $Id: Module.php 16541 2009-07-07 06:59:03Z bkarwin $
+ * @version    $Id: Module.php 18550 2009-10-15 17:24:29Z matthew $
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
 
@@ -233,9 +233,10 @@ class Zend_Controller_Router_Route_Module extends Zend_Controller_Router_Route_A
         unset($params[$this->_actionKey]);
 
         foreach ($params as $key => $value) {
+            $key = ($encode) ? urlencode($key) : $key;
             if (is_array($value)) {
                 foreach ($value as $arrayValue) {
-                    if ($encode) $arrayValue = urlencode($arrayValue);
+                    $arrayValue = ($encode) ? urlencode($arrayValue) : $arrayValue;
                     $url .= '/' . $key;
                     $url .= '/' . $arrayValue;
                 }

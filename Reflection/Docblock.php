@@ -16,7 +16,7 @@
  * @package    Zend_Reflection
  * @copyright  Copyright (c) 2005-2009 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
- * @version    $Id: Docblock.php 16971 2009-07-22 18:05:45Z mikaelkael $
+ * @version    $Id: Docblock.php 18675 2009-10-23 19:46:09Z beberlei $
  */
 
 /**
@@ -79,6 +79,7 @@ class Zend_Reflection_Docblock implements Reflector
      */
     public static function export()
     {
+
     }
     
     /**
@@ -91,6 +92,17 @@ class Zend_Reflection_Docblock implements Reflector
      */
     public function __toString()
     {
+        $str = "Docblock [ /* Docblock */ ] {".PHP_EOL.PHP_EOL;
+        $str .= "  - Tags [".count($this->_tags)."] {".PHP_EOL;
+
+        foreach($this->_tags AS $tag) {
+            $str .= "    ".$tag;
+        }
+
+        $str .= "  }".PHP_EOL;
+        $str .= "}".PHP_EOL;
+        
+        return $str;
     }
     
     /**

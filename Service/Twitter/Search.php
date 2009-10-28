@@ -17,7 +17,7 @@
  * @subpackage Twitter
  * @copyright  Copyright (c) 2005-2009 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
- * @version    $Id: Search.php 18173 2009-09-17 15:35:05Z padraic $
+ * @version    $Id: Search.php 18576 2009-10-16 15:51:11Z matthew $
  */
 
 /**

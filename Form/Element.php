@@ -32,7 +32,7 @@
  * @subpackage Element
  * @copyright  Copyright (c) 2005-2009 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
- * @version    $Id: Element.php 18190 2009-09-17 20:29:52Z matthew $
+ * @version    $Id: Element.php 18555 2009-10-15 20:10:50Z matthew $
  */
 class Zend_Form_Element implements Zend_Validate_Interface
 {
@@ -96,6 +96,13 @@ class Zend_Form_Element implements Zend_Validate_Interface
      * @var array
      */
     protected $_errors = array();
+
+    /**
+     * Separator to use when concatenating aggregate error messages (for 
+     * elements having array values)
+     * @var string
+     */
+    protected $_errorMessageSeparator = '; ';
 
     /**
      * Element filters
@@ -1413,6 +1420,28 @@ class Zend_Form_Element implements Zend_Validate_Interface
     }
 
     /**
+     * Get errorMessageSeparator
+     *
+     * @return string
+     */
+    public function getErrorMessageSeparator()
+    {
+        return $this->_errorMessageSeparator;
+    }
+
+    /**
+     * Set errorMessageSeparator
+     *
+     * @param  string $separator
+     * @return Zend_Form_Element
+     */
+    public function setErrorMessageSeparator($separator)
+    {
+        $this->_errorMessageSeparator = $separator;
+        return $this;
+    }
+
+    /**
      * Mark the element as being in a failed validation state
      *
      * @return Zend_Form_Element
@@ -2111,12 +2140,14 @@ class Zend_Form_Element implements Zend_Validate_Interface
             if (null !== $translator) {
                 $message = $translator->translate($message);
             }
-            if ($this->isArray() || is_array($value)) {
+            if (($this->isArray() || is_array($value))
+                && !empty($value)
+            ) {
                 $aggregateMessages = array();
                 foreach ($value as $val) {
                     $aggregateMessages[] = str_replace('%value%', $val, $message);
                 }
-                $messages[$key] = $aggregateMessages;
+                $messages[$key] = implode($this->getErrorMessageSeparator(), $aggregateMessages);
             } else {
                 $messages[$key] = str_replace('%value%', $value, $message);
             }

@@ -16,7 +16,7 @@
  * @package    Zend_View
  * @subpackage Helper
  * @copyright  Copyright (c) 2005-2009 Zend Technologies USA Inc. (http://www.zend.com)
- * @version    $Id: HeadTitle.php 16971 2009-07-22 18:05:45Z mikaelkael $
+ * @version    $Id: HeadTitle.php 18592 2009-10-16 17:23:15Z matthew $
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
 
@@ -63,7 +63,8 @@ class Zend_View_Helper_HeadTitle extends Zend_View_Helper_Placeholder_Container_
      */
     public function headTitle($title = null, $setType = Zend_View_Helper_Placeholder_Container_Abstract::APPEND)
     {
-        if ($title) {
+    	$title = (string) $title;
+        if ($title !== '') {
             if ($setType == Zend_View_Helper_Placeholder_Container_Abstract::SET) {
                 $this->set($title);
             } elseif ($setType == Zend_View_Helper_Placeholder_Container_Abstract::PREPEND) {
