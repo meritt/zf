@@ -17,7 +17,7 @@
  * @subpackage Client
  * @copyright  Copyright (c) 2005-2009 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
- * @version    $Id: Client.php 18570 2009-10-16 12:41:35Z sgehrig $
+ * @version    $Id: Client.php 18951 2009-11-12 16:26:19Z alexander $
  */
 
 /** Zend_Soap_Server */
@@ -1037,13 +1037,13 @@ class Zend_Soap_Client
      */
     public function addSoapInputHeader(SoapHeader $header, $permanent = false)
     {
-    	if ($permanent) {
-    		$this->_permanentSoapInputHeaders[] = $header;
-    	} else {
-    		$this->_soapInputHeaders[] = $header;
-    	}
+        if ($permanent) {
+            $this->_permanentSoapInputHeaders[] = $header;
+        } else {
+            $this->_soapInputHeaders[] = $header;
+        }
 
-    	return $this;
+        return $this;
     }
 
     /**
@@ -1066,7 +1066,7 @@ class Zend_Soap_Client
      */
     public function getLastSoapOutputHeaderObjects()
     {
-    	return $this->_soapOutputHeaders;
+        return $this->_soapOutputHeaders;
     }
 
     /**

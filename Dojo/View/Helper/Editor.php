@@ -17,7 +17,7 @@
  * @subpackage View
  * @copyright  Copyright (c) 2005-2009 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
- * @version    $Id: Editor.php 18596 2009-10-16 17:53:38Z matthew $
+ * @version    $Id: Editor.php 18951 2009-11-12 16:26:19Z alexander $
  */
 
 /** Zend_Dojo_View_Helper_Textarea */
@@ -28,7 +28,7 @@
 
 /**
  * Dojo Editor dijit
- * 
+ *
  * @uses       Zend_Dojo_View_Helper_Textarea
  * @package    Zend_Dojo
  * @subpackage View
@@ -68,11 +68,11 @@ class Zend_Dojo_View_Helper_Editor extends Zend_Dojo_View_Helper_Textarea
 
     /**
      * dijit.Editor
-     * 
-     * @param  string $id 
-     * @param  string $value 
-     * @param  array $params 
-     * @param  array $attribs 
+     *
+     * @param  string $id
+     * @param  string $value
+     * @param  array $params
+     * @param  array $attribs
      * @return string
      */
     public function editor($id, $value = null, $params = array(), $attribs = array())
@@ -112,7 +112,7 @@ class Zend_Dojo_View_Helper_Editor extends Zend_Dojo_View_Helper_Textarea
     }
 
     /**
-     * Generates the list of required modules to include, if any is needed. 
+     * Generates the list of required modules to include, if any is needed.
      *
      * @param array $plugins plugins to include
      * @return array
@@ -132,8 +132,8 @@ class Zend_Dojo_View_Helper_Editor extends Zend_Dojo_View_Helper_Textarea
 
     /**
      * Normalize editor element name
-     * 
-     * @param  string $name 
+     *
+     * @param  string $name
      * @return string
      */
     protected function _normalizeEditorName($name)
@@ -149,9 +149,9 @@ class Zend_Dojo_View_Helper_Editor extends Zend_Dojo_View_Helper_Textarea
 
     /**
      * Create onSubmit binding for element
-     * 
-     * @param  string $hiddenId 
-     * @param  string $editorId 
+     *
+     * @param  string $hiddenId
+     * @param  string $editorId
      * @return void
      */
     protected function _createEditorOnSubmit($hiddenId, $editorId)

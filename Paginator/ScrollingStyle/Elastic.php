@@ -16,7 +16,7 @@
  * @package    Zend_Paginator
  * @copyright  Copyright (c) 2005-2009 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
- * @version    $Id: Elastic.php 18553 2009-10-15 17:56:08Z norm2782 $
+ * @version    $Id: Elastic.php 18951 2009-11-12 16:26:19Z alexander $
  */
 
 /**
@@ -28,7 +28,7 @@
  * A Google-like scrolling style.  Incrementally expands the range to about
  * twice the given page range, then behaves like a slider.  See the example
  * link.
- * 
+ *
  * @link       http://www.google.com/search?q=Zend+Framework
  * @category   Zend
  * @package    Zend_Paginator
@@ -39,7 +39,7 @@ class Zend_Paginator_ScrollingStyle_Elastic extends Zend_Paginator_ScrollingStyl
 {
     /**
      * Returns an array of "local" pages given a page number and range.
-     * 
+     *
      * @param  Zend_Paginator $paginator
      * @param  integer $pageRange Unused
      * @return array
@@ -57,7 +57,7 @@ class Zend_Paginator_ScrollingStyle_Elastic extends Zend_Paginator_ScrollingStyl
         } else if ($originalPageRange + $pageNumber - 1 > count($paginator)) {
             $pageRange = $originalPageRange + count($paginator) - $pageNumber;
         }
-        
+
         return parent::getPages($paginator, $pageRange);
     }
 }

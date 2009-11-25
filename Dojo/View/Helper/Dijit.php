@@ -17,7 +17,7 @@
  * @subpackage View
  * @copyright  Copyright (c) 2005-2009 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
- * @version    $Id: Dijit.php 18669 2009-10-22 18:30:17Z matthew $
+ * @version    $Id: Dijit.php 19108 2009-11-20 17:19:44Z matthew $
  */
 
 /** Zend_View_Helper_HtmlElement */
@@ -25,7 +25,7 @@
 
 /**
  * Dojo dijit base class
- * 
+ *
  * @uses       Zend_View_Helper_Abstract
  * @package    Zend_Dojo
  * @subpackage View
@@ -73,8 +73,8 @@ abstract class Zend_Dojo_View_Helper_Dijit extends Zend_View_Helper_HtmlElement
      * Set view
      *
      * Set view and enable dojo
-     * 
-     * @param  Zend_View_Interface $view 
+     *
+     * @param  Zend_View_Interface $view
      * @return Zend_Dojo_View_Helper_Dijit
      */
     public function setView(Zend_View_Interface $view)
@@ -110,7 +110,7 @@ abstract class Zend_Dojo_View_Helper_Dijit extends Zend_View_Helper_HtmlElement
 
     /**
      * Whether or not to use declarative dijit creation
-     * 
+     *
      * @return bool
      */
     protected function _useDeclarative()
@@ -120,7 +120,7 @@ abstract class Zend_Dojo_View_Helper_Dijit extends Zend_View_Helper_HtmlElement
 
     /**
      * Whether or not to use programmatic dijit creation
-     * 
+     *
      * @return bool
      */
     protected function _useProgrammatic()
@@ -130,7 +130,7 @@ abstract class Zend_Dojo_View_Helper_Dijit extends Zend_View_Helper_HtmlElement
 
     /**
      * Whether or not to use programmatic dijit creation w/o script creation
-     * 
+     *
      * @return bool
      */
     protected function _useProgrammaticNoScript()
@@ -140,12 +140,12 @@ abstract class Zend_Dojo_View_Helper_Dijit extends Zend_View_Helper_HtmlElement
 
     /**
      * Create a layout container
-     * 
-     * @param  int $id 
-     * @param  string $content 
-     * @param  array $params 
-     * @param  array $attribs 
-     * @param  string|null $dijit 
+     *
+     * @param  int $id
+     * @param  string $content
+     * @param  array $params
+     * @param  array $attribs
+     * @param  string|null $dijit
      * @return string
      */
     protected function _createLayoutContainer($id, $content, array $params, array $attribs, $dijit = null)
@@ -163,12 +163,12 @@ abstract class Zend_Dojo_View_Helper_Dijit extends Zend_View_Helper_HtmlElement
 
     /**
      * Create HTML representation of a dijit form element
-     * 
-     * @param  string $id 
-     * @param  string $value 
-     * @param  array $params 
-     * @param  array $attribs 
-     * @param  string|null $dijit 
+     *
+     * @param  string $id
+     * @param  string $value
+     * @param  array $params
+     * @param  array $attribs
+     * @param  string|null $dijit
      * @return string
      */
     public function _createFormElement($id, $value, array $params, array $attribs, $dijit = null)
@@ -182,8 +182,8 @@ abstract class Zend_Dojo_View_Helper_Dijit extends Zend_View_Helper_HtmlElement
 
         $attribs = $this->_prepareDijit($attribs, $params, 'element', $dijit);
 
-        $html = '<input' 
-              . $this->_htmlAttribs($attribs) 
+        $html = '<input'
+              . $this->_htmlAttribs($attribs)
               . $this->getClosingBracket();
         return $html;
     }
@@ -192,10 +192,10 @@ abstract class Zend_Dojo_View_Helper_Dijit extends Zend_View_Helper_HtmlElement
      * Merge attributes and parameters
      *
      * Also sets up requires
-     * 
-     * @param  array $attribs 
-     * @param  array $params 
-     * @param  string $type 
+     *
+     * @param  array $attribs
+     * @param  array $params
+     * @param  string $type
      * @param  string $dijit Dijit type to use (otherwise, pull from $_dijit)
      * @return array
      */
@@ -260,6 +260,9 @@ abstract class Zend_Dojo_View_Helper_Dijit extends Zend_View_Helper_HtmlElement
         $dijit = (null === $dijit) ? $this->_dijit : $dijit;
         if ($this->_useDeclarative()) {
             $attribs = array_merge($attribs, $params);
+            if (isset($attribs['required'])) {
+                $attribs['required'] = ($attribs['required']) ? 'true' : 'false';
+            }
             $attribs['dojoType'] = $dijit;
         } elseif (!$this->_useProgrammaticNoScript()) {
             $this->_createDijit($dijit, $attribs['id'], $params);
@@ -270,10 +273,10 @@ abstract class Zend_Dojo_View_Helper_Dijit extends Zend_View_Helper_HtmlElement
 
     /**
      * Create a dijit programmatically
-     * 
-     * @param  string $dijit 
-     * @param  string $id 
-     * @param  array $params 
+     *
+     * @param  string $dijit
+     * @param  string $id
+     * @param  array $params
      * @return void
      */
     protected function _createDijit($dijit, $id, array $params)
@@ -287,9 +290,9 @@ abstract class Zend_Dojo_View_Helper_Dijit extends Zend_View_Helper_HtmlElement
 
     /**
      * Cast a boolean to a string value
-     * 
-     * @param  mixed $item 
-     * @param  string $key 
+     *
+     * @param  mixed $item
+     * @param  string $key
      * @return void
      */
     protected function _castBoolToString(&$item, $key)
@@ -302,9 +305,9 @@ abstract class Zend_Dojo_View_Helper_Dijit extends Zend_View_Helper_HtmlElement
 
     /**
      * Render a hidden element to hold a value
-     * 
-     * @param  string $id 
-     * @param  string|int|float $value 
+     *
+     * @param  string $id
+     * @param  string|int|float $value
      * @return string
      */
     protected function _renderHiddenElement($id, $value)
@@ -319,7 +322,7 @@ abstract class Zend_Dojo_View_Helper_Dijit extends Zend_View_Helper_HtmlElement
 
     /**
      * Create JS function for retrieving parent form
-     * 
+     *
      * @return void
      */
     protected function _createGetParentFormFunction()

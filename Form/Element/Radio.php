@@ -24,13 +24,13 @@
 
 /**
  * Radio form element
- * 
+ *
  * @category   Zend
  * @package    Zend_Form
  * @subpackage Element
  * @copyright  Copyright (c) 2005-2009 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
- * @version    $Id: Radio.php 18547 2009-10-15 15:51:24Z matthew $
+ * @version    $Id: Radio.php 18951 2009-11-12 16:26:19Z alexander $
  */
 class Zend_Form_Element_Radio extends Zend_Form_Element_Multi
 {
@@ -44,7 +44,7 @@ class Zend_Form_Element_Radio extends Zend_Form_Element_Multi
      * Load default decorators
      *
      * Disables "for" attribute of label if label decorator enabled.
-     * 
+     *
      * @return void
      */
     public function loadDefaultDecorators()

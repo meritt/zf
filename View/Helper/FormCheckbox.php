@@ -17,7 +17,7 @@
  * @subpackage Helper
  * @copyright  Copyright (c) 2005-2009 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
- * @version    $Id: FormCheckbox.php 18591 2009-10-16 17:23:06Z matthew $
+ * @version    $Id: FormCheckbox.php 18951 2009-11-12 16:26:19Z alexander $
  */
 
 
@@ -87,7 +87,7 @@ class Zend_View_Helper_FormCheckbox extends Zend_View_Helper_FormElement
             $endTag= '>';
         }
 
-        // build the element 
+        // build the element
         $xhtml = '';
         if (!$disable && !strstr($name, '[]')) {
             $xhtml = $this->_hidden($name, $checkedOptions['uncheckedValue']);
@@ -106,10 +106,10 @@ class Zend_View_Helper_FormCheckbox extends Zend_View_Helper_FormElement
 
     /**
      * Determine checkbox information
-     * 
-     * @param  string $value 
-     * @param  bool $checked 
-     * @param  array|null $checkedOptions 
+     *
+     * @param  string $value
+     * @param  bool $checked
+     * @param  array|null $checkedOptions
      * @return array
      */
     public static function determineCheckboxInfo($value, $checked, array $checkedOptions = null)
