@@ -15,9 +15,9 @@
  * @category   Zend
  * @package    Zend_Application
  * @subpackage Resource
- * @copyright  Copyright (c) 2005-2009 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright  Copyright (c) 2005-2010 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
- * @version    $Id: Router.php 18951 2009-11-12 16:26:19Z alexander $
+ * @version    $Id: Router.php 20096 2010-01-06 02:05:09Z bkarwin $
  */
 
 /**
@@ -27,7 +27,7 @@
  * @category   Zend
  * @package    Zend_Application
  * @subpackage Resource
- * @copyright  Copyright (c) 2005-2009 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright  Copyright (c) 2005-2010 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
 class Zend_Application_Resource_Router
@@ -65,14 +65,17 @@ class Zend_Application_Resource_Router
                 $options['routes'] = array();
             }
 
-
             if (isset($options['chainNameSeparator'])) {
                 $this->_router->setChainNameSeparator($options['chainNameSeparator']);
             }
 
+            if (isset($options['useRequestParametersAsGlobal'])) {
+                $this->_router->useRequestParametersAsGlobal($options['useRequestParametersAsGlobal']);
+            }
 
             $this->_router->addConfig(new Zend_Config($options['routes']));
         }
+
         return $this->_router;
     }
 }

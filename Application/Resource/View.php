@@ -15,9 +15,9 @@
  * @category   Zend
  * @package    Zend_Application
  * @subpackage Resource
- * @copyright  Copyright (c) 2005-2009 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright  Copyright (c) 2005-2010 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
- * @version    $Id: View.php 18951 2009-11-12 16:26:19Z alexander $
+ * @version    $Id: View.php 20472 2010-01-21 16:15:09Z freak $
  */
 
 /**
@@ -27,7 +27,7 @@
  * @category   Zend
  * @package    Zend_Application
  * @subpackage Resource
- * @copyright  Copyright (c) 2005-2009 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright  Copyright (c) 2005-2010 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
 class Zend_Application_Resource_View extends Zend_Application_Resource_ResourceAbstract
@@ -60,7 +60,12 @@ class Zend_Application_Resource_View extends Zend_Application_Resource_ResourceA
     public function getView()
     {
         if (null === $this->_view) {
-            $this->_view = new Zend_View($this->getOptions());
+            $options = $this->getOptions();
+            $this->_view = new Zend_View($options);
+
+            if(isset($options['doctype'])) {
+                $this->_view->doctype()->setDoctype(strtoupper($options['doctype']));
+            }
         }
         return $this->_view;
     }
