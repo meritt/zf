@@ -16,7 +16,7 @@
  * @package    Zend_Oauth
  * @copyright  Copyright (c) 2005-2010 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
- * @version    $Id: Client.php 20232 2010-01-12 17:56:33Z matthew $
+ * @version    $Id: Client.php 20950 2010-02-06 17:20:59Z padraic $
  */
 
 /** Zend_Oauth */
@@ -92,6 +92,8 @@ class Zend_Oauth_Client extends Zend_Http_Client
             $this->setRequestMethod(self::GET);
         } elseif($method == self::POST) {
             $this->setRequestMethod(self::POST);
+        } elseif($method == self::PUT) {
+            $this->setRequestMethod(self::PUT);
         }
         return parent::setMethod($method);
     }
@@ -161,9 +163,19 @@ class Zend_Oauth_Client extends Zend_Http_Client
             $this->setRawData($raw);
             $this->paramsPost = array();
         } elseif ($requestScheme == Zend_Oauth::REQUEST_SCHEME_QUERYSTRING) {
-            $this->getUri()->setQuery('');
+            $params = array();
+            $query = $this->getUri()->getQuery();
+            if ($query) {
+                $queryParts = split('&', $this->getUri()->getQuery());
+                foreach ($queryParts as $queryPart) {
+                    $kvTuple = split('=', $queryPart);
+                    $params[$kvTuple[0]] = 
+                        (array_key_exists(1, $kvTuple) ? $kvTuple[1] : NULL);
+                }
+            }
+
             $query = $this->getToken()->toQueryString(
-                $this->getUri(true), $this->_config, $this->paramsGet
+                $this->getUri(true), $this->_config, $params
             );
             $this->getUri()->setQuery($query);
             $this->paramsGet = array();

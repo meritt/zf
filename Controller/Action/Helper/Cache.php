@@ -64,6 +64,13 @@ class Zend_Controller_Action_Helper_Cache
      * @var array
      */
     protected $_tags = array();
+    
+    /**
+     * Indexed map of Extensions by Controller and Action
+     *
+     * @var array
+     */
+    protected $_extensions = array();
 
     /**
      * Track output buffering condition
@@ -78,7 +85,7 @@ class Zend_Controller_Action_Helper_Cache
      * @param array $tags
      * @return void
      */
-    public function direct(array $actions, array $tags = array())
+    public function direct(array $actions, array $tags = array(), $extension = null)
     {
         $controller = $this->getRequest()->getControllerName();
         $actions = array_unique($actions);
@@ -100,6 +107,14 @@ class Zend_Controller_Action_Helper_Cache
                 }
             }
         }
+        if ($extension) {
+            if (!isset($this->_extensions[$controller])) {
+                $this->_extensions[$controller] = array();
+            }
+            foreach ($actions as $action) {
+                $this->_extensions[$controller][$action] = $extension;
+            }
+        }
     }
 
     /**
@@ -114,13 +129,17 @@ class Zend_Controller_Action_Helper_Cache
      */
     public function removePage($relativeUrl, $recursive = false)
     {
+        $cache = $this->getCache(Zend_Cache_Manager::PAGECACHE);
         if ($recursive) {
-            return $this->getCache(Zend_Cache_Manager::PAGECACHE)
-                ->getBackend()->removeRecursive($relativeUrl);
-        } else {
-            return $this->getCache(Zend_Cache_Manager::PAGECACHE)
-                ->getBackend()->remove($relativeUrl);
+            $backend = $cache->getBackend();
+            if (($backend instanceof Zend_Cache_Backend)
+                && method_exists($backend, 'removeRecursively')
+            ) {
+                return $backend->removeRecursively($relativeUrl);
+            }
         }
+
+        return $cache->remove($relativeUrl);
     }
 
     /**
@@ -162,8 +181,12 @@ class Zend_Controller_Action_Helper_Cache
             && !empty($this->_tags[$controller][$action])) {
                 $tags = array_unique($this->_tags[$controller][$action]);
             }
+            $extension = null;
+            if (isset($this->_extensions[$controller][$action])) {
+                $extension = $this->_extensions[$controller][$action];
+            }
             $this->getCache(Zend_Cache_Manager::PAGECACHE)
-                ->start($this->_encodeCacheId($reqUri), $tags);
+                ->start($this->_encodeCacheId($reqUri), $tags, $extension);
         }
     }
     

@@ -16,7 +16,7 @@
  * @package   Zend_Locale
  * @copyright  Copyright (c) 2005-2010 Zend Technologies USA Inc. (http://www.zend.com)
  * @license   http://framework.zend.com/license/new-bsd     New BSD License
- * @version   $Id: Locale.php 20532 2010-01-22 20:18:23Z thomas $
+ * @version   $Id: Locale.php 20731 2010-01-28 22:29:28Z thomas $
  */
 
 /**
@@ -291,6 +291,8 @@ class Zend_Locale
                 throw new Zend_Locale_Exception("Unknown locale '" . (string) $locale . "' can not be set as default!");
             }
         }
+
+        self::$_auto = self::getBrowser() + self::getEnvironment() + self::getDefault();
     }
 
     /**

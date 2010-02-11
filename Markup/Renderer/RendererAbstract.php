@@ -17,7 +17,7 @@
  * @subpackage Renderer
  * @copyright  Copyright (c) 2005-2010 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
- * @version    $Id: RendererAbstract.php 20662 2010-01-26 18:40:33Z kokx $
+ * @version    $Id: RendererAbstract.php 20956 2010-02-06 17:58:58Z kokx $
  */
 
 /**
@@ -667,6 +667,34 @@ abstract class Zend_Markup_Renderer_RendererAbstract
         $this->_markups[$markup]['filter'] = $filter;
 
         return $this;
+    }
+
+    /**
+     * Add a render group
+     *
+     * @param string $name
+     * @param array $allowedInside
+     * @param array $allowsInside
+     *
+     * @return void
+     */
+    public function addGroup($name, array $allowedInside = array(), array $allowsInside = array())
+    {
+        $this->_groups[$name] = $allowsInside;
+
+        foreach ($allowedInside as $group) {
+            $this->_groups[$group][] = $name;
+        }
+    }
+
+    /**
+     * Get group definitions
+     *
+     * @return array
+     */
+    public function getGroups()
+    {
+        return $this->_groups;
     }
 
     /**

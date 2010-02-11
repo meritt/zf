@@ -18,13 +18,13 @@
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
 
-/** Zend_Filter */
+/** @see Zend_Filter */
 // require_once 'Zend/Filter.php';
 
-/** Zend_Form */
+/** @see Zend_Form */
 // require_once 'Zend/Form.php';
 
-/** Zend_Validate_Interface */
+/** @see Zend_Validate_Interface */
 // require_once 'Zend/Validate/Interface.php';
 
 /**
@@ -35,7 +35,7 @@
  * @subpackage Element
  * @copyright  Copyright (c) 2005-2010 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
- * @version    $Id: Element.php 20538 2010-01-22 20:37:03Z thomas $
+ * @version    $Id: Element.php 20813 2010-02-01 20:02:23Z yoshida@zend.co.jp $
  */
 class Zend_Form_Element implements Zend_Validate_Interface
 {
@@ -232,6 +232,7 @@ class Zend_Form_Element implements Zend_Validate_Interface
      * - Zend_Config: Zend_Config with options for configuring element
      *
      * @param  string|array|Zend_Config $spec
+     * @param  array|Zend_Config $options
      * @return void
      * @throws Zend_Form_Exception if no element name after initialization
      */
@@ -1325,11 +1326,14 @@ class Zend_Form_Element implements Zend_Validate_Interface
         $this->_messages = array();
         $this->_errors   = array();
         $result          = true;
-        $translator      = $this->getTranslator();
         $isArray         = $this->isArray();
         foreach ($this->getValidators() as $key => $validator) {
             if (method_exists($validator, 'setTranslator')) {
-                $validator->setTranslator($translator);
+                $validator->setTranslator($this->getTranslator());
+            }
+
+            if (method_exists($validator, 'setDisableTranslator')) {
+                $validator->setDisableTranslator($this->translatorIsDisabled());
             }
 
             if ($isArray && is_array($value)) {

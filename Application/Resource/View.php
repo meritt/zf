@@ -17,8 +17,14 @@
  * @subpackage Resource
  * @copyright  Copyright (c) 2005-2010 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
- * @version    $Id: View.php 20472 2010-01-21 16:15:09Z freak $
+ * @version    $Id: View.php 20816 2010-02-01 21:13:54Z freak $
  */
+
+/**
+ * @see Zend_Application_Resource_ResourceAbstract
+ */
+// require_once 'Zend/Application/Resource/ResourceAbstract.php';
+
 
 /**
  * Resource for settings view options

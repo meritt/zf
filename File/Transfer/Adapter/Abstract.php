@@ -16,7 +16,7 @@
  * @package   Zend_File_Transfer
  * @copyright  Copyright (c) 2005-2010 Zend Technologies USA Inc. (http://www.zend.com)
  * @license   http://framework.zend.com/license/new-bsd     New BSD License
- * @version   $Id: Abstract.php 20269 2010-01-13 21:05:26Z thomas $
+ * @version   $Id: Abstract.php 20911 2010-02-04 19:40:57Z thomas $
  */
 
 /**
@@ -553,6 +553,10 @@ abstract class Zend_File_Transfer_Adapter_Abstract
         $file = $this->_getFiles($files, false, true);
 
         if (is_array($options)) {
+            if ($file === null) {
+                $this->_options = array_merge($this->_options, $options);
+            }
+
             foreach ($options as $name => $value) {
                 foreach ($file as $key => $content) {
                     switch ($name) {
@@ -1274,8 +1278,8 @@ abstract class Zend_File_Transfer_Adapter_Abstract
 
         if (class_exists('finfo', false)) {
             $const = defined('FILEINFO_MIME_TYPE') ? FILEINFO_MIME_TYPE : FILEINFO_MIME;
-            if (!empty($magicFile)) {
-                $mime = new finfo($const, $magicFile);
+            if (!empty($value['options']['magicFile'])) {
+                $mime = new finfo($const, $value['options']['magicFile']);
             } else {
                 $mime = new finfo($const);
             }

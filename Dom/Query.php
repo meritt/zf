@@ -16,7 +16,7 @@
  * @package    Zend_Dom
  * @copyright  Copyright (c) 2005-2010 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
- * @version    $Id: Query.php 20096 2010-01-06 02:05:09Z bkarwin $
+ * @version    $Id: Query.php 20908 2010-02-04 19:00:54Z matthew $
  */
 
 /**
@@ -178,12 +178,12 @@ class Zend_Dom_Query
         $type   = $this->getDocumentType();
         switch ($type) {
             case self::DOC_XML:
-                $success = @$domDoc->loadXML($document);
+                $success = $domDoc->loadXML($document);
                 break;
             case self::DOC_HTML:
             case self::DOC_XHTML:
             default:
-                $success = @$domDoc->loadHTML($document);
+                $success = $domDoc->loadHTML($document);
                 break;
         }
 
