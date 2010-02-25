@@ -16,7 +16,7 @@
  * @package    Zend_Oauth
  * @copyright  Copyright (c) 2005-2010 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
- * @version    $Id: Client.php 20950 2010-02-06 17:20:59Z padraic $
+ * @version    $Id: Client.php 21071 2010-02-16 14:35:00Z padraic $
  */
 
 /** Zend_Oauth */
@@ -94,6 +94,10 @@ class Zend_Oauth_Client extends Zend_Http_Client
             $this->setRequestMethod(self::POST);
         } elseif($method == self::PUT) {
             $this->setRequestMethod(self::PUT);
+        }  elseif($method == self::DELETE) {
+            $this->setRequestMethod(self::DELETE);
+        }   elseif($method == self::HEAD) {
+            $this->setRequestMethod(self::HEAD);
         }
         return parent::setMethod($method);
     }
