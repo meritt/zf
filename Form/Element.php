@@ -35,7 +35,7 @@
  * @subpackage Element
  * @copyright  Copyright (c) 2005-2010 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
- * @version    $Id: Element.php 20813 2010-02-01 20:02:23Z yoshida@zend.co.jp $
+ * @version    $Id: Element.php 21649 2010-03-25 21:49:06Z rob $
  */
 class Zend_Form_Element implements Zend_Validate_Interface
 {
@@ -412,6 +412,16 @@ class Zend_Form_Element implements Zend_Validate_Interface
             return Zend_Form::getDefaultTranslator();
         }
         return $this->_translator;
+    }
+    
+    /**
+     * Does this element have its own specific translator?
+     * 
+     * @return bool
+     */
+    public function hasTranslator()
+    {
+        return (bool)$this->_translator;
     }
 
     /**
