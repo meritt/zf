@@ -16,7 +16,7 @@
  * @package   Zend_File_Transfer
  * @copyright  Copyright (c) 2005-2010 Zend Technologies USA Inc. (http://www.zend.com)
  * @license   http://framework.zend.com/license/new-bsd     New BSD License
- * @version   $Id: Abstract.php 21468 2010-03-11 21:21:55Z thomas $
+ * @version   $Id: Abstract.php 21936 2010-04-18 16:23:34Z thomas $
  */
 
 /**
@@ -1291,7 +1291,7 @@ abstract class Zend_File_Transfer_Adapter_Abstract
                 $mime = @finfo_open($const);
             }
 
-            if ($mime !== false) {
+            if (!empty($mime)) {
                 $result = finfo_file($mime, $file);
             }
 

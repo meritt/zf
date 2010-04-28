@@ -17,7 +17,7 @@
  * @subpackage Zend_Translate_Adapter
  * @copyright  Copyright (c) 2005-2010 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
- * @version    $Id: Adapter.php 21662 2010-03-27 20:23:42Z thomas $
+ * @version    $Id: Adapter.php 21770 2010-04-05 20:16:08Z thomas $
  */
 
 /**
@@ -202,6 +202,10 @@ abstract class Zend_Translate_Adapter {
 
         try {
             if (!($options['content'] instanceof Zend_Translate) && !($options['content'] instanceof Zend_Translate_Adapter)) {
+                if (empty($options['locale'])) {
+                    $options['locale'] = null;
+                }
+
                 $options['locale'] = Zend_Locale::findLocale($options['locale']);
             }
         } catch (Zend_Locale_Exception $e) {

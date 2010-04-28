@@ -28,7 +28,7 @@
  * @package    Zend_Form
  * @copyright  Copyright (c) 2005-2010 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
- * @version    $Id: Form.php 21704 2010-03-31 16:32:29Z matthew $
+ * @version    $Id: Form.php 21924 2010-04-17 11:55:50Z alab $
  */
 class Zend_Form implements Iterator, Countable, Zend_Validate_Interface
 {
@@ -842,7 +842,7 @@ class Zend_Form implements Iterator, Countable, Zend_Validate_Interface
     public function setName($name)
     {
         $name = $this->filterName($name);
-        if (('0' !== $name) && empty($name)) {
+        if ('' === (string)$name) {
             // require_once 'Zend/Form/Exception.php';
             throw new Zend_Form_Exception('Invalid name provided; must contain only valid variable characters and be non-empty');
         }
@@ -1226,12 +1226,20 @@ class Zend_Form implements Iterator, Countable, Zend_Validate_Interface
      */
     public function setDefaults(array $defaults)
     {
+        $eBelongTo = null;
+
         if ($this->isArray()) {
-            $defaults = $this->_dissolveArrayValue($defaults, $this->getElementsBelongTo());
+            $eBelongTo = $this->getElementsBelongTo();
+            $defaults = $this->_dissolveArrayValue($defaults, $eBelongTo);
         }
         foreach ($this->getElements() as $name => $element) {
-            if (array_key_exists($name, $defaults)) {
-                $this->setDefault($name, $defaults[$name]);
+            $check = $defaults;
+            if (($belongsTo = $element->getBelongsTo()) !== $eBelongTo) {
+                $check = $this->_dissolveArrayValue($defaults, $belongsTo);
+            }
+            if (array_key_exists($name, $check)) {
+                $this->setDefault($name, $check[$name]);
+                $defaults = $this->_dissolveArrayUnsetKey($defaults, $belongsTo, $name);
             }
         }
         foreach ($this->getSubForms() as $name => $form) {
@@ -1301,14 +1309,33 @@ class Zend_Form implements Iterator, Countable, Zend_Validate_Interface
     public function getValues($suppressArrayNotation = false)
     {
         $values = array();
+        $eBelongTo = null;
+        
+        if ($this->isArray()) {
+            $eBelongTo = $this->getElementsBelongTo();
+        }
+        
         foreach ($this->getElements() as $key => $element) {
             if (!$element->getIgnore()) {
-                $values[$key] = $element->getValue();
+                $merge = array();
+                if (($belongsTo = $element->getBelongsTo()) !== $eBelongTo) {
+                    if ('' !== (string)$belongsTo) {
+                        $key = $belongsTo . '[' . $key . ']';
+                    }
+                }
+                $merge = $this->_attachToArray($element->getValue(), $key);
+                $values = array_merge_recursive($values, $merge);
             }
         }
         foreach ($this->getSubForms() as $key => $subForm) {
-            $fValues = $this->_attachToArray($subForm->getValues(true), $subForm->getElementsBelongTo());
-            $values = array_merge($values, $fValues);
+            $merge = array();
+            if (!$subForm->isArray()) {
+                $merge[$key] = $subForm->getValues();
+            } else {
+                $merge = $this->_attachToArray($subForm->getValues(true),
+                                               $subForm->getElementsBelongTo());
+            }
+            $values = array_merge_recursive($values, $merge);
         }
 
         if (!$suppressArrayNotation && $this->isArray()) {
@@ -1331,30 +1358,45 @@ class Zend_Form implements Iterator, Countable, Zend_Validate_Interface
      */
     public function getValidValues($data, $suppressArrayNotation = false)
     {
-        if ($this->isArray()) {
-            $data = $this->_dissolveArrayValue($data, $this->getElementsBelongTo());
-        }
         $values = array();
+        $eBelongTo = null;
+
+        if ($this->isArray()) {
+            $eBelongTo = $this->getElementsBelongTo();
+            $data = $this->_dissolveArrayValue($data, $eBelongTo);
+        }
+        $context = $data;
         foreach ($this->getElements() as $key => $element) {
-            if (isset($data[$key])) {
-                if($element->isValid($data[$key], $data)) {
-                    $values[$key] = $element->getValue();
+            $check = $data;
+            if (($belongsTo = $element->getBelongsTo()) !== $eBelongTo) {
+                $check = $this->_dissolveArrayValue($data, $belongsTo);
+            }
+            if (isset($check[$key])) {
+                if($element->isValid($check[$key], $context)) {
+                    $merge = array();
+                    if ($belongsTo !== $eBelongTo && '' !== (string)$belongsTo) {
+                        $key = $belongsTo . '[' . $key . ']';
+                    }
+                    $merge = $this->_attachToArray($element->getValue(), $key);
+                    $values = array_merge_recursive($values, $merge);
                 }
+                $data = $this->_dissolveArrayUnsetKey($data, $belongsTo, $key);
             }
         }
         foreach ($this->getSubForms() as $key => $form) {
+            $merge = array();
             if (isset($data[$key]) && !$form->isArray()) {
                 $tmp = $form->getValidValues($data[$key]);
                 if (!empty($tmp)) {
-                    $values[$key] = $tmp;
+                    $merge[$key] = $tmp;
                 }
             } else {
                 $tmp = $form->getValidValues($data, true);
                 if (!empty($tmp)) {
-                    $fValues = $this->_attachToArray($tmp, $form->getElementsBelongTo());
-                    $values = array_merge($values, $fValues);
+                    $merge = $this->_attachToArray($tmp, $form->getElementsBelongTo());
                 }
             }
+            $values = array_merge_recursive($values, $merge);
         }
         if (!$suppressArrayNotation && $this->isArray() && !empty($values)) {
             $values = $this->_attachToArray($values, $this->getElementsBelongTo());
@@ -1416,7 +1458,7 @@ class Zend_Form implements Iterator, Countable, Zend_Validate_Interface
     {
         $origName = $this->getElementsBelongTo();
         $name = $this->filterName($array, true);
-        if (empty($name)) {
+        if ('' === $name) {
             $name = null;
         }
         $this->_elementsBelongTo = $name;
@@ -1468,7 +1510,7 @@ class Zend_Form implements Iterator, Countable, Zend_Validate_Interface
     {
         if ((null === $this->_elementsBelongTo) && $this->isArray()) {
             $name = $this->getName();
-            if (!empty($name)) {
+            if ('' !== (string)$name) {
                 return $name;
             }
         }
@@ -1761,7 +1803,7 @@ class Zend_Form implements Iterator, Countable, Zend_Validate_Interface
     {
         if (null === $name) {
             $name = $group->getName();
-            if (empty($name)) {
+            if ('' === (string)$name) {
                 // require_once 'Zend/Form/Exception.php';
                 throw new Zend_Form_Exception('Invalid display group added; requires name');
             }
@@ -1953,7 +1995,7 @@ class Zend_Form implements Iterator, Countable, Zend_Validate_Interface
      */
     protected function _getArrayName($value)
     {
-        if (empty($value) || !is_string($value)) {
+        if (!is_string($value) || '' === $value) {
             return $value;
         }
 
@@ -2005,6 +2047,34 @@ class Zend_Form implements Iterator, Countable, Zend_Validate_Interface
     }
 
     /**
+     * Given an array, an optional arrayPath and a key this method
+     * dissolves the arrayPath and unsets the key within the array
+     * if it exists.
+     * 
+     * @param array $array 
+     * @param string|null $arrayPath
+     * @param string $key
+     * @return array
+     */
+    protected function _dissolveArrayUnsetKey($array, $arrayPath, $key)
+    {
+        $unset =& $array;
+        $path  = trim(strtr((string)$arrayPath, array('[' => '/', ']' => '')), '/');
+        $segs  = ('' !== $path) ? explode('/', $path) : array();
+        
+        foreach ($segs as $seg) {
+            if (!array_key_exists($seg, (array)$unset)) {
+                return $array;
+            }
+            $unset =& $unset[$seg];
+        }
+        if (array_key_exists($key, (array)$unset)) {
+            unset($unset[$key]);
+        }
+        return $array;
+    }
+
+    /**
      * Converts given arrayPath to an array and attaches given value at the end of it.
      *
      * @param  mixed $value The value to attach
@@ -2044,19 +2114,26 @@ class Zend_Form implements Iterator, Countable, Zend_Validate_Interface
         }
         $translator = $this->getTranslator();
         $valid      = true;
+        $eBelongTo  = null;
 
         if ($this->isArray()) {
-            $data = $this->_dissolveArrayValue($data, $this->getElementsBelongTo());
+            $eBelongTo = $this->getElementsBelongTo();
+            $data = $this->_dissolveArrayValue($data, $eBelongTo);
         }
-
+        $context = $data;
         foreach ($this->getElements() as $key => $element) {
             if (null !== $translator && !$element->hasTranslator()) {
                 $element->setTranslator($translator);
             }
-            if (!isset($data[$key])) {
-                $valid = $element->isValid(null, $data) && $valid;
+            $check = $data;
+            if (($belongsTo = $element->getBelongsTo()) !== $eBelongTo) {
+                $check = $this->_dissolveArrayValue($data, $belongsTo);
+            }
+            if (!isset($check[$key])) {
+                $valid = $element->isValid(null, $context) && $valid;
             } else {
-                $valid = $element->isValid($data[$key], $data) && $valid;
+                $valid = $element->isValid($check[$key], $context) && $valid;
+                $data = $this->_dissolveArrayUnsetKey($data, $belongsTo, $key);
             }
         }
         foreach ($this->getSubForms() as $key => $form) {
@@ -2090,19 +2167,28 @@ class Zend_Form implements Iterator, Countable, Zend_Validate_Interface
      */
     public function isValidPartial(array $data)
     {
+        $eBelongTo  = null;
+
         if ($this->isArray()) {
-            $data = $this->_dissolveArrayValue($data, $this->getElementsBelongTo());
+            $eBelongTo = $this->getElementsBelongTo();
+            $data = $this->_dissolveArrayValue($data, $eBelongTo);
         }
 
-        $translator        = $this->getTranslator();
-        $valid             = true;
+        $translator = $this->getTranslator();
+        $valid      = true;
+        $context    = $data;
 
         foreach ($this->getElements() as $key => $element) {
-            if (isset($data[$key])) {
+            $check = $data;
+            if (($belongsTo = $element->getBelongsTo()) !== $eBelongTo) {
+                $check = $this->_dissolveArrayValue($data, $belongsTo);
+            }
+            if (isset($check[$key])) {
                 if (null !== $translator && !$element->hasTranslator()) {
                     $element->setTranslator($translator);
                 }
-                $valid = $element->isValid($data[$key], $data) && $valid;
+                $valid = $element->isValid($check[$key], $context) && $valid;
+                $data = $this->_dissolveArrayUnsetKey($data, $belongsTo, $key);
             }
         }
         foreach ($this->getSubForms() as $key => $form) {
@@ -2271,22 +2357,35 @@ class Zend_Form implements Iterator, Countable, Zend_Validate_Interface
      * @param  string $name
      * @return array
      */
-    public function getErrors($name = null)
+    public function getErrors($name = null, $suppressArrayNotation = false)
     {
         $errors = array();
-        if ((null !== $name) && isset($this->_elements[$name])) {
-            $errors = $this->getElement($name)->getErrors();
-        } elseif ((null !== $name) && isset($this->_subForms[$name])) {
-            $errors = $this->getSubForm($name)->getErrors();
-        } else {
-            foreach ($this->_elements as $key => $element) {
-                $errors[$key] = $element->getErrors();
-            }
-            foreach ($this->getSubForms() as $key => $subForm) {
-                $fErrors = $this->_attachToArray($subForm->getErrors(), $subForm->getElementsBelongTo());
-                $errors = array_merge($errors, $fErrors);
+        if (null !== $name) {
+            if (isset($this->_elements[$name])) {
+                return $this->getElement($name)->getErrors();
+            } else if (isset($this->_subForms[$name])) {
+                return $this->getSubForm($name)->getErrors(null, true);
             }
         }
+        
+        foreach ($this->_elements as $key => $element) {
+            $errors[$key] = $element->getErrors();
+        }
+        foreach ($this->getSubForms() as $key => $subForm) {
+            $merge = array();
+            if (!$subForm->isArray()) {
+                $merge[$key] = $subForm->getErrors();
+            } else {
+                $merge = $this->_attachToArray($subForm->getErrors(null, true),
+                                               $subForm->getElementsBelongTo());
+            }
+            $errors = array_merge_recursive($errors, $merge);
+        }
+
+        if (!$suppressArrayNotation && $this->isArray()) {
+            $errors = $this->_attachToArray($errors, $this->getElementsBelongTo());
+        }
+
         return $errors;
     }
 
@@ -2299,22 +2398,19 @@ class Zend_Form implements Iterator, Countable, Zend_Validate_Interface
      */
     public function getMessages($name = null, $suppressArrayNotation = false)
     {
-        if ((null !== $name) && isset($this->_elements[$name])) {
-            return $this->getElement($name)->getMessages();
-        }
-
-        if ((null !== $name) && isset($this->_subForms[$name])) {
-            return $this->getSubForm($name)->getMessages(null, true);
-        }
-
-        $arrayKeys = array();
-        foreach ($this->getSubForms() as $key => $subForm) {
-            $array = $this->_getArrayName($subForm->getElementsBelongTo());
-            if (!empty($array)) {
-                if ($name == $array) {
-                    return $subForm->getMessages(null, true);
+        if (null !== $name) {
+            if (isset($this->_elements[$name])) {
+                return $this->getElement($name)->getMessages();
+            } else if (isset($this->_subForms[$name])) {
+                return $this->getSubForm($name)->getMessages(null, true);
+            }
+            foreach ($this->getSubForms() as $key => $subForm) {
+                if ($subForm->isArray()) {
+                    $belongTo = $subForm->getElementsBelongTo();
+                    if ($name == $this->_getArrayName($belongTo)) {
+                        return $subForm->getMessages(null, true);
+                    }
                 }
-                $arrayKeys[$key] = $subForm->getElementsBelongTo();
             }
         }
 
@@ -2333,14 +2429,15 @@ class Zend_Form implements Iterator, Countable, Zend_Validate_Interface
         }
 
         foreach ($this->getSubForms() as $key => $subForm) {
-            $fMessages = $subForm->getMessages(null, true);
-            if (!empty($fMessages)) {
-                if (array_key_exists($key, $arrayKeys)) {
-                    $fMessages = $this->_attachToArray($fMessages, $arrayKeys[$key]);
-                    $messages = array_merge($messages, $fMessages);
+            $merge = $subForm->getMessages(null, true);
+            if (!empty($merge)) {
+                if (!$subForm->isArray()) {
+                    $merge = array($key => $merge);
                 } else {
-                    $messages[$key] = $fMessages;
+                    $merge = $this->_attachToArray($merge,
+                                                   $subForm->getElementsBelongTo());
                 }
+                $messages = array_merge_recursive($messages, $merge);
             }
         }
 
@@ -2788,6 +2885,16 @@ class Zend_Form implements Iterator, Countable, Zend_Validate_Interface
         return self::$_translatorDefault;
     }
 
+    /**
+     * Is there a default translation object set?
+     * 
+     * @return boolean
+     */
+    public static function hasDefaultTranslator()
+    { 
+        return (bool)self::$_translatorDefault;
+    }
+    
     /**
      * Indicate whether or not translation should be disabled
      *
