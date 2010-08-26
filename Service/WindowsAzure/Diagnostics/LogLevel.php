@@ -14,23 +14,26 @@
  *
  * @category   Zend
  * @package    Zend_Service_WindowsAzure
- * @subpackage Exception
- * @version    $Id$
+ * @subpackage Diagnostics
  * @copyright  Copyright (c) 2005-2010 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
+ * @version    $Id$
  */
 
-/**
- * @see Zend_Service_WindowsAzure_Exception
- */
-// require_once 'Zend/Service/WindowsAzure/Exception.php';
 
 /**
  * @category   Zend
  * @package    Zend_Service_WindowsAzure
- * @subpackage RetryPolicy
+ * @subpackage Diagnostics
  * @copyright  Copyright (c) 2005-2010 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
-class Zend_Service_WindowsAzure_RetryPolicy_Exception extends Zend_Service_WindowsAzure_Exception
-{}
+class Zend_Service_WindowsAzure_Diagnostics_LogLevel
+{
+	const UNDEFINED 	= 'Undefined';
+	const CRITICAL 		= 'Critical';
+	const ERROR 		= 'Error';
+	const WARNING 		= 'Warning';
+	const INFORMATION 	= 'Information';
+	const VERBOSE 		= 'Verbose';
+}
