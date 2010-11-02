@@ -16,7 +16,7 @@
  * @package    Zend_Application
  * @copyright  Copyright (c) 2005-2010 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
- * @version    $Id: Application.php 20096 2010-01-06 02:05:09Z bkarwin $
+ * @version    $Id: Application.php 23163 2010-10-19 16:30:26Z matthew $
  */
 
 /**
@@ -77,7 +77,7 @@ class Zend_Application
     {
         $this->_environment = (string) $environment;
 
-        // require_once 'Zend/Loader/Autoloader.php';
+        require_once 'Zend/Loader/Autoloader.php';
         $this->_autoloader = Zend_Loader_Autoloader::getInstance();
 
         if (null !== $options) {
@@ -317,7 +317,7 @@ class Zend_Application
         }
 
         if (!class_exists($class, false)) {
-            // require_once $path;
+            require_once $path;
             if (!class_exists($class, false)) {
                 throw new Zend_Application_Exception('Bootstrap class not found');
             }
@@ -385,6 +385,14 @@ class Zend_Application
 
             case 'xml':
                 $config = new Zend_Config_Xml($file, $environment);
+                break;
+
+            case 'json':
+                $config = new Zend_Config_Json($file, $environment);
+                break;
+
+            case 'yaml':
+                $config = new Zend_Config_Yaml($file, $environment);
                 break;
 
             case 'php':
